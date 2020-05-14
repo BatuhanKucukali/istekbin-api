@@ -10,12 +10,12 @@ import (
 	"time"
 )
 
-func CreateHandler(r *redis.Client) func(c echo.Context) error {
+func CreateHandler(rd *redis.Client) func(c echo.Context) error {
 	return func(c echo.Context) error {
 		u := uuid.New()
 		rPath := fmt.Sprintf("r/%s", u.String()) // TODO add baseUrl
 
-		err := r.Set(u.String(), nil, time.Hour*24).Err()
+		err := rd.Set(u.String(), nil, time.Hour*24).Err()
 		if err != nil {
 			log.Error("redis set error.", err)
 			return echo.NewHTTPError(http.StatusInternalServerError, "request can not created.")

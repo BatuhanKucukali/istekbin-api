@@ -15,20 +15,20 @@ func main() {
 	e.Use(middleware.Recover())
 	e.Use(middleware.BodyLimit("128K"))
 
-	r := redis.NewClient(&redis.Options{
+	rd := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "",
 		DB:       0,
 	})
 
-	_, err := r.Ping().Result()
+	_, err := rd.Ping().Result()
 	if err != nil {
 		log.Fatal("Redis connection error.", err)
 	}
 
 	e.GET("/", handler.HomeHandler)
-	e.POST("/c", handler.CreateHandler(r))
-	e.Any("/r/:uuid/*", handler.RequestHandler(r))
+	e.POST("/c", handler.CreateHandler(rd))
+	e.Any("/r/:uuid/*", handler.RequestHandler(rd))
 
 	e.Logger.Fatal(e.Start(":1323"))
 }

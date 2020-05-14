@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/go-redis/redis/v7"
 	"github.com/google/uuid"
@@ -25,14 +26,12 @@ type Request struct {
 
 const ForbiddenContentType = "multipart/form-data"
 
-func RequestHandler(r *redis.Client) func(c echo.Context) error {
+func RequestHandler(rd *redis.Client) func(c echo.Context) error {
 	return func(c echo.Context) error {
-		uString := c.Param("uuid")
-		u, err := uuid.Parse(uString)
+		u, err := uuid.Parse(c.Param("uuid"))
 		if err != nil {
 			return echo.NewHTTPError(http.StatusBadRequest, "invalid path.")
 		}
-		fmt.Println(u)
 
 		req := c.Request()
 		contentType := req.Header.Get("Content-Type")
@@ -57,7 +56,29 @@ func RequestHandler(r *redis.Client) func(c echo.Context) error {
 		}
 		r.Body = string(body)
 
-		return c.JSON(http.StatusOK, r)
+		val, err := rd.Get(u.String()).Result()
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, "request not found.")
+		}
+
+		var rl []Request
+
+		if len(val) > 0 {
+			err := json.Unmarshal([]byte(val), &rl)
+			if err != nil {
+				return echo.NewHTTPError(http.StatusInternalServerError, "request can not deserialized.")
+			}
+		}
+
+		requests := append(rl, *r)
+
+		v, err := json.Marshal(requests)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, "request can not serialized.")
+		}
+		rd.Set(u.String(), v, time.Hour*24)
+
+		return c.String(http.StatusOK, "ok")
 	}
 }
 
