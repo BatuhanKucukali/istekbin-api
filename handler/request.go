@@ -33,6 +33,11 @@ func RequestHandler(rd *redis.Client) func(c echo.Context) error {
 			return echo.NewHTTPError(http.StatusBadRequest, "invalid path.")
 		}
 
+		_, err = rd.Get(u.String()).Result()
+		if err == redis.Nil {
+			return echo.NewHTTPError(http.StatusBadRequest, "request not found.")
+		}
+
 		req := c.Request()
 		contentType := req.Header.Get("Content-Type")
 
