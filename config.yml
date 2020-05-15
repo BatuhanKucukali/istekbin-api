@@ -1,0 +1,11 @@
+app:
+  base-url: http://localhost:1323
+  port: 1323
+  body-limit: 128K
+  request-store-time: 24h
+
+redis:
+  host: localhost
+  port: 6379
+  password:
+  db: 0

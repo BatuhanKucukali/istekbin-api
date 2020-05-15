@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/batuhankucukali/binrequest/config"
 	"github.com/go-redis/redis/v7"
 	"github.com/google/uuid"
 	"github.com/labstack/echo"
@@ -24,19 +25,19 @@ type Request struct {
 	CreatedAt   time.Time         `json:"created_at"`
 }
 
-func RequestHandler(rd *redis.Client) func(c echo.Context) error {
+func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) error {
 	return func(c echo.Context) error {
 		u, err := uuid.Parse(c.Param("uuid"))
 		if err != nil {
 			return echo.ErrNotFound
 		}
 
-		if err := rd.Get(u.String()).Err(); err != redis.Nil {
+		if _, err := rd.Get(u.String()).Result(); err != nil {
 			return echo.ErrNotFound
 		}
 
 		req := c.Request()
-		contentType := req.Header.Get("Content-Type")
+		contentType := req.Header.Get(echo.HeaderContentType)
 
 		if isSupportedContentType(contentType) { // TODO it must be support all content type
 			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("%s not supported.", echo.MIMEMultipartForm))
@@ -73,7 +74,7 @@ func RequestHandler(rd *redis.Client) func(c echo.Context) error {
 
 		requests := append(rl, *r)
 
-		if err := set(rd, u.String(), requests); err != nil {
+		if err := set(conf, rd, u.String(), requests); err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, "request can not serialized.")
 		}
 
@@ -81,13 +82,12 @@ func RequestHandler(rd *redis.Client) func(c echo.Context) error {
 	}
 }
 
-func set(rd *redis.Client, key string, value interface{}) error {
+func set(conf *config.App, rd *redis.Client, key string, value interface{}) error {
 	p, err := json.Marshal(value)
 	if err != nil {
 		return err
 	}
-	rd.Set(key, p, time.Hour*24)
-	return nil
+	return rd.Set(key, p, conf.RequestStoreTime).Err()
 }
 
 func getHeader(header http.Header) map[string]string {
