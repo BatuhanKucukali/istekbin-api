@@ -21,8 +21,7 @@ func main() {
 		DB:       0,
 	})
 
-	_, err := rd.Ping().Result()
-	if err != nil {
+	if err := rd.Ping().Err(); err != nil {
 		log.Fatal("Redis connection error.", err)
 	}
 

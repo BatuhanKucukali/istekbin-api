@@ -15,9 +15,8 @@ func CreateHandler(rd *redis.Client) func(c echo.Context) error {
 		u := uuid.New()
 		rPath := fmt.Sprintf("r/%s", u.String()) // TODO add baseUrl
 
-		err := rd.Set(u.String(), nil, time.Hour*24).Err()
-		if err != nil {
-			log.Error("redis set error.", err)
+		if err := rd.Set(u.String(), nil, time.Hour*24).Err(); err != nil {
+			log.Error("redis set error.")
 			return echo.NewHTTPError(http.StatusInternalServerError, "request can not created.")
 		}
 

@@ -24,25 +24,22 @@ type Request struct {
 	CreatedAt   time.Time         `json:"created_at"`
 }
 
-const ForbiddenContentType = "multipart/form-data"
-
 func RequestHandler(rd *redis.Client) func(c echo.Context) error {
 	return func(c echo.Context) error {
 		u, err := uuid.Parse(c.Param("uuid"))
 		if err != nil {
-			return echo.NewHTTPError(http.StatusBadRequest, "invalid path.")
+			return echo.ErrNotFound
 		}
 
-		_, err = rd.Get(u.String()).Result()
-		if err == redis.Nil {
-			return echo.NewHTTPError(http.StatusBadRequest, "request not found.")
+		if err := rd.Get(u.String()).Err(); err != redis.Nil {
+			return echo.ErrNotFound
 		}
 
 		req := c.Request()
 		contentType := req.Header.Get("Content-Type")
 
 		if isSupportedContentType(contentType) { // TODO it must be support all content type
-			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("%s not supported yet.", ForbiddenContentType))
+			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("%s not supported.", echo.MIMEMultipartForm))
 		}
 
 		r := new(Request)
@@ -69,22 +66,28 @@ func RequestHandler(rd *redis.Client) func(c echo.Context) error {
 		var rl []Request
 
 		if len(val) > 0 {
-			err := json.Unmarshal([]byte(val), &rl)
-			if err != nil {
+			if err := json.Unmarshal([]byte(val), &rl); err != nil {
 				return echo.NewHTTPError(http.StatusInternalServerError, "request can not deserialized.")
 			}
 		}
 
 		requests := append(rl, *r)
 
-		v, err := json.Marshal(requests)
-		if err != nil {
+		if err := set(rd, u.String(), requests); err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, "request can not serialized.")
 		}
-		rd.Set(u.String(), v, time.Hour*24)
 
 		return c.String(http.StatusOK, "ok")
 	}
+}
+
+func set(rd *redis.Client, key string, value interface{}) error {
+	p, err := json.Marshal(value)
+	if err != nil {
+		return err
+	}
+	rd.Set(key, p, time.Hour*24)
+	return nil
 }
 
 func getHeader(header http.Header) map[string]string {
@@ -96,5 +99,5 @@ func getHeader(header http.Header) map[string]string {
 }
 
 func isSupportedContentType(contentType string) bool {
-	return strings.Contains(contentType, ForbiddenContentType)
+	return strings.Contains(contentType, echo.MIMEMultipartForm)
 }
