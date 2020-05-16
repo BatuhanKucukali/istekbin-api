@@ -29,6 +29,12 @@ func main() {
 	e.Pre(middleware.AddTrailingSlash())
 	e.Use(middleware.BodyLimit(conf.AppConfig.BodyLimit))
 
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins:  []string{conf.AppConfig.ClientUrl},
+		AllowHeaders:  []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderLocation},
+		ExposeHeaders: []string{echo.HeaderLocation},
+	}))
+
 	rd := redis.NewClient(&redis.Options{
 		Addr:     fmt.Sprintf("%s:%d", conf.RedisConfig.Host, conf.RedisConfig.Port),
 		Password: conf.RedisConfig.Password,

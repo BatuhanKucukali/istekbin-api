@@ -8,6 +8,8 @@ import (
 	"net/http"
 )
 
+const emptyList = "[]"
+
 func ListHandler(rd *redis.Client) func(c echo.Context) error {
 	return func(c echo.Context) error {
 		u, err := uuid.Parse(c.Param("uuid"))
@@ -20,8 +22,11 @@ func ListHandler(rd *redis.Client) func(c echo.Context) error {
 			return echo.ErrNotFound
 		}
 
-		var rl []Request
+		if len(reqVal) == 0 {
+			reqVal = "[]"
+		}
 
+		var rl []Request
 		if err := json.Unmarshal([]byte(reqVal), &rl); err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, "request can not deserialized.")
 		}

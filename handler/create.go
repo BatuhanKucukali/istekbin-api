@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"github.com/batuhankucukali/binrequest/config"
 	"github.com/go-redis/redis/v7"
 	"github.com/google/uuid"
@@ -19,7 +18,7 @@ func CreateHandler(conf *config.App, rd *redis.Client) func(c echo.Context) erro
 			return echo.NewHTTPError(http.StatusInternalServerError, "request can not created.")
 		}
 
-		c.Response().Header().Add("Location", fmt.Sprintf("%s/r/%s", conf.BaseUrl, u.String()))
+		c.Response().Header().Add("Location", u.String())
 		return c.NoContent(http.StatusCreated)
 	}
 }
