@@ -15,14 +15,14 @@ func ListHandler(rd *redis.Client) func(c echo.Context) error {
 			return echo.ErrNotFound
 		}
 
-		val, err := rd.Get(u.String()).Result()
+		reqVal, err := rd.Get(u.String()).Result()
 		if err != nil {
 			return echo.ErrNotFound
 		}
 
 		var rl []Request
 
-		if err := json.Unmarshal([]byte(val), &rl); err != nil {
+		if err := json.Unmarshal([]byte(reqVal), &rl); err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, "request can not deserialized.")
 		}
 

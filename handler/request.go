@@ -32,7 +32,7 @@ func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) err
 			return echo.ErrNotFound
 		}
 
-		val, err := rd.Get(u.String()).Result()
+		reqVal, err := rd.Get(u.String()).Result()
 		if err != nil {
 			return echo.ErrNotFound
 		}
@@ -62,8 +62,8 @@ func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) err
 
 		var rl []Request
 
-		if len(val) > 0 {
-			if err := json.Unmarshal([]byte(val), &rl); err != nil {
+		if len(reqVal) > 0 {
+			if err := json.Unmarshal([]byte(reqVal), &rl); err != nil {
 				return echo.NewHTTPError(http.StatusInternalServerError, "request can not deserialized.")
 			}
 		}
