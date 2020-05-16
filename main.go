@@ -41,6 +41,7 @@ func main() {
 
 	e.GET("/", handler.HomeHandler)
 	e.POST("/c/", handler.CreateHandler(&conf.AppConfig, rd))
+	e.GET("/l/:uuid/", handler.ListHandler(rd))
 	e.Any("/r/:uuid/*", handler.RequestHandler(&conf.AppConfig, rd))
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", conf.AppConfig.Port)))

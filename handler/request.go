@@ -32,7 +32,8 @@ func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) err
 			return echo.ErrNotFound
 		}
 
-		if _, err := rd.Get(u.String()).Result(); err != nil {
+		val, err := rd.Get(u.String()).Result()
+		if err != nil {
 			return echo.ErrNotFound
 		}
 
@@ -59,11 +60,6 @@ func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) err
 		}
 		r.Body = string(body)
 
-		val, err := rd.Get(u.String()).Result()
-		if err != nil {
-			return echo.NewHTTPError(http.StatusInternalServerError, "request not found.")
-		}
-
 		var rl []Request
 
 		if len(val) > 0 {
@@ -72,7 +68,7 @@ func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) err
 			}
 		}
 
-		requests := append(rl, *r)
+		requests := append([]Request{*r}, rl...)
 
 		if err := set(conf, rd, u.String(), requests); err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, "request can not serialized.")
