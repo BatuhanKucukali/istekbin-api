@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/batuhankucukali/binrequest/config"
+	"github.com/batuhankucukali/istekbin/config"
 	"github.com/go-redis/redis/v7"
 	"github.com/google/uuid"
 	"github.com/labstack/echo"

@@ -1,4 +1,4 @@
-module github.com/batuhankucukali/binrequest
+module github.com/batuhankucukali/istekbin
 
 go 1.14
 

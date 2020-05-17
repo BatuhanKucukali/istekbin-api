@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/batuhankucukali/binrequest/config"
-	"github.com/batuhankucukali/binrequest/handler"
+	"github.com/batuhankucukali/istekbin/config"
+	"github.com/batuhankucukali/istekbin/handler"
 	"github.com/go-redis/redis/v7"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
