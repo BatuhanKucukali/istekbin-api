@@ -8,11 +8,10 @@ type Config struct {
 }
 
 type App struct {
-	BaseUrl          string        `mapstructure:"base-url"`
 	Port             int16         `mapstructure:"port"`
 	BodyLimit        string        `mapstructure:"body-limit"`
 	RequestStoreTime time.Duration `mapstructure:"request-store-time"`
-	ClientUrl        string        `mapstructure:"client-url"`
+	ClientUrl        string        `mapstructure:"clientUrl"`
 }
 
 type Redis struct {
