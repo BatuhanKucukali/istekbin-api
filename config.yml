@@ -3,7 +3,7 @@ app:
   port: 1323
   body-limit: 512K
   request-store-time: 24h
-  client_url: http://localhost:8080
+  client-url: http://localhost:8080
 
 redis:
   host: localhost

@@ -12,7 +12,7 @@ type App struct {
 	Port             int16         `mapstructure:"port"`
 	BodyLimit        string        `mapstructure:"body-limit"`
 	RequestStoreTime time.Duration `mapstructure:"request-store-time"`
-	ClientUrl        string        `mapstructure:"client_url"`
+	ClientUrl        string        `mapstructure:"client-url"`
 }
 
 type Redis struct {
