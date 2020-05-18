@@ -9,8 +9,8 @@ type Config struct {
 
 type App struct {
 	Port             int16         `mapstructure:"port"`
-	BodyLimit        string        `mapstructure:"body-limit"`
-	RequestStoreTime time.Duration `mapstructure:"request-store-time"`
+	BodyLimit        string        `mapstructure:"bodyLimit"`
+	RequestStoreTime time.Duration `mapstructure:"requestStoreTime"`
 	ClientUrl        string        `mapstructure:"clientUrl"`
 }
 

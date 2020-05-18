@@ -1,8 +1,7 @@
 app:
-  base-url: http://localhost:1323
   port: 1323
-  body-limit: 512K
-  request-store-time: 24h
+  bodyLimit: 512K
+  requestStoreTime: 24h
   clientUrl: http://localhost:8080
 
 redis:
