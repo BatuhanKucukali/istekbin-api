@@ -7,6 +7,7 @@ import (
 	"github.com/go-redis/redis/v7"
 	"github.com/google/uuid"
 	"github.com/labstack/echo"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -40,10 +41,6 @@ func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) err
 		req := c.Request()
 		contentType := req.Header.Get(echo.HeaderContentType)
 
-		if isSupportedContentType(contentType) { // TODO it must be support all content type
-			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("%s not supported.", echo.MIMEMultipartForm))
-		}
-
 		r := new(Request)
 		r.Method = req.Method
 		r.Host = req.Host
@@ -54,12 +51,20 @@ func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) err
 		r.CreatedAt = time.Now()
 		r.Header = getHeader(req.Header)
 
-		body, err := ioutil.ReadAll(req.Body)
-		if err != nil {
-			return echo.NewHTTPError(http.StatusInternalServerError, "body can not reading.")
+		if isMultipartForm(contentType) {
+			body, err := parseMultipartBody(c)
+			if err != nil {
+				return echo.NewHTTPError(http.StatusInternalServerError, "body can not reading.")
+			}
+			r.Body = body
+			r.ContentType = echo.MIMEMultipartForm
+		} else {
+			body, err := parseBody(req.Body)
+			if err != nil {
+				return echo.NewHTTPError(http.StatusInternalServerError, "body can not reading.")
+			}
+			r.Body = body
 		}
-		r.Body = string(body)
-
 		var rl []Request
 
 		if len(reqVal) > 0 {
@@ -94,6 +99,30 @@ func getHeader(header http.Header) map[string]string {
 	return headerMap
 }
 
-func isSupportedContentType(contentType string) bool {
+func parseBody(reqBody io.ReadCloser) (string, error) {
+	body, err := ioutil.ReadAll(reqBody)
+	if err != nil {
+		return "", err
+	}
+	return string(body), nil
+}
+
+func parseMultipartBody(c echo.Context) (string, error) {
+	multi, err := c.MultipartForm()
+
+	if err != nil {
+		return "", err
+	}
+
+	var body string
+
+	for form := range multi.Value {
+		body += fmt.Sprintf("%s=%s\n", form, c.FormValue(form))
+	}
+
+	return body, nil
+}
+
+func isMultipartForm(contentType string) bool {
 	return strings.Contains(contentType, echo.MIMEMultipartForm)
 }
