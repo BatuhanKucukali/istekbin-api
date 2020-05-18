@@ -1,4 +1,4 @@
-name: Deploy dokku
+name: Deploy
 
 on:
   push:
@@ -6,15 +6,15 @@ on:
       - master
 
 jobs:
-  deploy:
-    name: Deploy
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - id: deploy
-        name: Deploy to dokku
-        uses: idoberko2/dokku-deploy-github-action@v1
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          dokku-host: ${{ secrets.DOKKU_HOST }}
-          app-name: ${{ secrets.DOKKU_APP_NAME }}
+      - uses: actions/checkout@v1
+      - name: Dokku deploy
+        uses: vitalyliber/dokku-github-action@v4.0
+        env:
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          PUBLIC_KEY: ${{ secrets.PUBLIC_KEY }}
+          HOST: ${{ secrets.DOKKU_HOST }}
+          PROJECT: ${{ secrets.DOKKU_APP_NAME }}
+          FORCE_DEPLOY: true
