@@ -23,6 +23,11 @@ cd istekbin-api
 - [ ] support docker-compose.yml
 - [ ] add test
 - [ ] add swagger
+- [ ] private istekbin
+- [ ] add rate limit
+- [ ] support file upload
+- [ ] history of istekbin
+- [ ] configurable response
 
 
 ## Getting help ##
