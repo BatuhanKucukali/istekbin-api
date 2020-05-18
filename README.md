@@ -20,7 +20,7 @@ cd istekbin-api
 - [x] support ci/cd
 - [ ] ip :(
 - [ ] update README.md
-- [ ] support form-data 
+- [x] support form-data 
 - [ ] support docker-compose.yml
 - [ ] add test
 - [ ] add swagger
