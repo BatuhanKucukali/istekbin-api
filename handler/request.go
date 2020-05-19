@@ -50,8 +50,8 @@ func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) err
 		r.UserAgent = req.UserAgent()
 		r.Ip = getIp(conf, req)
 		r.CreatedAt = time.Now()
-		r.Headers = getHeader(req.Header)
-		r.Cookies = getCookie(req)
+		r.Headers = getHeaders(req.Header)
+		r.Cookies = getCookies(req)
 
 		if isMultipartForm(contentType) {
 			body, err := parseMultipartBody(c)
@@ -85,7 +85,7 @@ func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) err
 	}
 }
 
-func getCookie(req *http.Request) map[string]string {
+func getCookies(req *http.Request) map[string]string {
 	var cookieMap = make(map[string]string)
 	for _, c := range req.Cookies() {
 		cookieMap[c.Name] = c.Value
@@ -112,7 +112,7 @@ func set(conf *config.App, rd *redis.Client, key string, value interface{}) erro
 	return rd.Set(key, p, conf.RequestStoreTime).Err()
 }
 
-func getHeader(header http.Header) map[string]string {
+func getHeaders(header http.Header) map[string]string {
 	var headerMap = make(map[string]string)
 	for key, value := range header {
 		headerMap[key] = strings.Join(value, ",")
