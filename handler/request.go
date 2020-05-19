@@ -44,7 +44,7 @@ func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) err
 		r := new(Request)
 		r.Method = req.Method
 		r.Host = req.Host
-		r.Uri = req.RequestURI
+		r.Uri = getUri(req, u)
 		r.ContentType = contentType
 		r.UserAgent = req.UserAgent()
 		r.Ip = req.RemoteAddr
@@ -81,6 +81,10 @@ func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) err
 
 		return c.String(http.StatusOK, "ok")
 	}
+}
+
+func getUri(req *http.Request, u uuid.UUID) string {
+	return strings.Replace(req.RequestURI, "r/"+u.String()+"/", "", -1)
 }
 
 func set(conf *config.App, rd *redis.Client, key string, value interface{}) error {
