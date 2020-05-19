@@ -22,6 +22,7 @@ type Request struct {
 	Uri         string            `json:"uri"`
 	ContentType string            `json:"content_type"`
 	Header      map[string]string `json:"header"`
+	Cookie      map[string]string `json:"cookie"`
 	Body        string            `json:"body"`
 	CreatedAt   time.Time         `json:"created_at"`
 }
@@ -50,6 +51,7 @@ func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) err
 		r.Ip = getIp(conf, req)
 		r.CreatedAt = time.Now()
 		r.Header = getHeader(req.Header)
+		r.Cookie = getCookie(req)
 
 		if isMultipartForm(contentType) {
 			body, err := parseMultipartBody(c)
@@ -81,6 +83,14 @@ func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) err
 
 		return c.String(http.StatusOK, "ok")
 	}
+}
+
+func getCookie(req *http.Request) map[string]string {
+	var cookieMap = make(map[string]string)
+	for _, c := range req.Cookies() {
+		cookieMap[c.Name] = c.Value
+	}
+	return cookieMap
 }
 
 func getIp(conf *config.App, req *http.Request) string {
