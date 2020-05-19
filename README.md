@@ -18,7 +18,7 @@ cd istekbin-api
 ## Todo
 
 - [x] support ci/cd
-- [ ] ip :(
+- [X] ip :(
 - [ ] update README.md
 - [x] support form-data 
 - [ ] support docker-compose.yml

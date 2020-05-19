@@ -47,7 +47,7 @@ func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) err
 		r.Uri = getUri(req, u)
 		r.ContentType = contentType
 		r.UserAgent = req.UserAgent()
-		r.Ip = req.RemoteAddr
+		r.Ip = getIp(conf, req)
 		r.CreatedAt = time.Now()
 		r.Header = getHeader(req.Header)
 
@@ -81,6 +81,13 @@ func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) err
 
 		return c.String(http.StatusOK, "ok")
 	}
+}
+
+func getIp(conf *config.App, req *http.Request) string {
+	if conf.Env == "production" {
+		return req.Header.Get("X-Forwarded-For")
+	}
+	return req.RemoteAddr
 }
 
 func getUri(req *http.Request, u uuid.UUID) string {
