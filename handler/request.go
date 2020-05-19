@@ -21,8 +21,8 @@ type Request struct {
 	Ip          string            `json:"ip"`
 	Uri         string            `json:"uri"`
 	ContentType string            `json:"content_type"`
-	Header      map[string]string `json:"header"`
-	Cookie      map[string]string `json:"cookie"`
+	Headers     map[string]string `json:"headers"`
+	Cookies     map[string]string `json:"cookies"`
 	Body        string            `json:"body"`
 	CreatedAt   time.Time         `json:"created_at"`
 }
@@ -50,8 +50,8 @@ func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) err
 		r.UserAgent = req.UserAgent()
 		r.Ip = getIp(conf, req)
 		r.CreatedAt = time.Now()
-		r.Header = getHeader(req.Header)
-		r.Cookie = getCookie(req)
+		r.Headers = getHeader(req.Header)
+		r.Cookies = getCookie(req)
 
 		if isMultipartForm(contentType) {
 			body, err := parseMultipartBody(c)
