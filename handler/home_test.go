@@ -9,7 +9,7 @@ import (
 )
 
 func TestHomeHandler(t *testing.T) {
-	// setup
+	// redisClient
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 	rec := httptest.NewRecorder()

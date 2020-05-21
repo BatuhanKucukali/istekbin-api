@@ -37,7 +37,7 @@ func getRequestListJsonString() string {
 }
 
 func TestListShouldReturnEmtpyList(t *testing.T) {
-	// setup
+	// Setup
 	key := uuid.New().String()
 
 	e := echo.New()
@@ -47,8 +47,8 @@ func TestListShouldReturnEmtpyList(t *testing.T) {
 	c.SetParamNames("uuid")
 	c.SetParamValues(key)
 
-	rd := initRedis()
-	rd.Set(key, nil, time.Minute*1)
+	rd := redisClient()
+	defer teardown()
 
 	// assertions
 	if assert.NoError(t, ListHandler(rd)(c)) {
@@ -58,7 +58,7 @@ func TestListShouldReturnEmtpyList(t *testing.T) {
 }
 
 func TestListShouldReturnList(t *testing.T) {
-	// setup
+	// Setup
 	key := uuid.New().String()
 
 	e := echo.New()
@@ -70,7 +70,8 @@ func TestListShouldReturnList(t *testing.T) {
 
 	listJsonString := getRequestListJsonString()
 
-	rd := initRedis()
+	rd := redisClient()
+	defer teardown()
 	rd.Set(key, listJsonString, time.Minute*1)
 
 	// assertions
