@@ -8,8 +8,6 @@ import (
 	"net/http"
 )
 
-const emptyList = "[]"
-
 func ListHandler(rd *redis.Client) func(c echo.Context) error {
 	return func(c echo.Context) error {
 		u, err := uuid.Parse(c.Param("uuid"))
@@ -17,7 +15,9 @@ func ListHandler(rd *redis.Client) func(c echo.Context) error {
 			return echo.ErrNotFound
 		}
 
-		reqVal, err := rd.Get(u.String()).Result()
+		key := u.String()
+
+		reqVal, err := rd.Get(key).Result()
 		if err != nil {
 			return echo.ErrNotFound
 		}
