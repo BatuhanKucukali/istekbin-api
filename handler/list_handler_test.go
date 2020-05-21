@@ -12,10 +12,6 @@ import (
 	"time"
 )
 
-var (
-	emptyJSON = `[]`
-)
-
 func getRequestListJsonString() string {
 	r := new(Request)
 	r.Uri = "/1"
@@ -30,13 +26,35 @@ func getRequestListJsonString() string {
 	requests := append([]Request{*r, *r2}, rl...)
 	p, err := json.Marshal(requests)
 	if err != nil {
-		fmt.Println("json convertion error.")
+		fmt.Println("marshaling error")
 	}
 
 	return string(p)
 }
 
-func TestListShouldReturnEmtpyList(t *testing.T) {
+func TestListShouldReturnNotFoundWhenUuidIsNotValid(t *testing.T) {
+	// Setup
+	e := echo.New()
+	req := httptest.NewRequest(http.MethodPost, "/l", nil)
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+	c.SetParamNames("uuid")
+	c.SetParamValues("abc")
+
+	rd := redisClient()
+	defer teardown()
+
+	// assertions
+	err := ListHandler(rd)(c)
+	if assert.NotNil(t, err) {
+		rec, ok := err.(*echo.HTTPError)
+		if ok {
+			assert.Equal(t, http.StatusNotFound, rec.Code)
+		}
+	}
+}
+
+func TestListShouldReturnNotFoundWhenKeyIsNotFound(t *testing.T) {
 	// Setup
 	key := uuid.New().String()
 
@@ -51,9 +69,35 @@ func TestListShouldReturnEmtpyList(t *testing.T) {
 	defer teardown()
 
 	// assertions
+	err := ListHandler(rd)(c)
+	if assert.NotNil(t, err) {
+		rec, ok := err.(*echo.HTTPError)
+		if ok {
+			assert.Equal(t, http.StatusNotFound, rec.Code)
+		}
+	}
+}
+
+func TestListShouldReturnEmptyResponse(t *testing.T) {
+	// Setup
+	key := uuid.New().String()
+
+	e := echo.New()
+	req := httptest.NewRequest(http.MethodPost, "/l", nil)
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+	c.SetParamNames("uuid")
+	c.SetParamValues(key)
+
+	rd := redisClient()
+	defer teardown()
+
+	rd.Set(key, nil, time.Minute*1)
+
+	// assertions
 	if assert.NoError(t, ListHandler(rd)(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
-		assert.JSONEq(t, emptyJSON, rec.Body.String())
+		assert.JSONEq(t, "[]", rec.Body.String())
 	}
 }
 
