@@ -12,24 +12,14 @@ git clone git@github.com:BatuhanKucukali/istekbin-api.git
 ```bash
 cd istekbin-api
 ```
-
-// TODO add dependency & build steps
-
-## Todo
-
-- [x] support ci/cd
-- [X] ip :(
-- [ ] update README.md
-- [x] support form-data 
-- [ ] support docker-compose.yml
-- [ ] add test
-- [ ] add swagger
-- [ ] private istekbin
-- [ ] add rate limit
-- [ ] support file upload
-- [ ] history of istekbin
-- [ ] configurable response
-
+3 . Build
+```bash
+go build
+```
+4 . Run
+```bash
+./istekbin
+```
 
 ## Getting help ##
 
