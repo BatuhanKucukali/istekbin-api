@@ -9,6 +9,9 @@ app:
     - X-Forwarded-Port
     - X-Forwarded-Proto
     - X-Request-Start
+rate:
+  limit: 100
+  period: 1m
 
 redis:
   host: localhost

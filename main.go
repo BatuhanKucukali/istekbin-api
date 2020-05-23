@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/batuhankucukali/istekbin/config"
 	"github.com/batuhankucukali/istekbin/handler"
+	middleware2 "github.com/batuhankucukali/istekbin/middleware"
 	"github.com/go-redis/redis/v7"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -24,17 +25,6 @@ func main() {
 
 	e := echo.New()
 
-	e.Pre(middleware.RemoveTrailingSlash())
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
-	e.Use(middleware.BodyLimit(conf.AppConfig.BodyLimit))
-
-	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins:  []string{conf.AppConfig.ClientUrl},
-		AllowHeaders:  []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderLocation},
-		ExposeHeaders: []string{echo.HeaderLocation},
-	}))
-
 	rd := redis.NewClient(&redis.Options{
 		Addr:     fmt.Sprintf("%s:%d", conf.RedisConfig.Host, conf.RedisConfig.Port),
 		Password: conf.RedisConfig.Password,
@@ -44,6 +34,18 @@ func main() {
 	if err := rd.Ping().Err(); err != nil {
 		log.Fatal("Redis connection error.", err)
 	}
+
+	e.Pre(middleware.RemoveTrailingSlash())
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+	e.Use(middleware.BodyLimit(conf.AppConfig.BodyLimit))
+	e.Use(middleware2.RateLimit(conf.Rate, rd))
+
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins:  []string{conf.AppConfig.ClientUrl},
+		AllowHeaders:  []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderLocation},
+		ExposeHeaders: []string{echo.HeaderLocation},
+	}))
 
 	e.GET("/", handler.HomeHandler)
 	e.POST("/c", handler.CreateHandler(&conf.AppConfig, rd))
