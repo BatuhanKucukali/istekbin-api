@@ -34,17 +34,12 @@ func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) err
 			return echo.ErrNotFound
 		}
 
-		req := c.Request()
-
-		isForbiddenHeaderExist, forbiddenHeader := isForbiddenHeaderExist(req.Header, *conf)
-		if isForbiddenHeaderExist {
-			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("%s header is forbidden.", forbiddenHeader))
-		}
-
 		reqVal, err := rd.Get(u.String()).Result()
 		if err != nil {
 			return echo.ErrNotFound
 		}
+
+		req := c.Request()
 
 		contentType := req.Header.Get(echo.HeaderContentType)
 
@@ -89,15 +84,6 @@ func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) err
 
 		return c.String(http.StatusOK, "ok")
 	}
-}
-
-func isForbiddenHeaderExist(headers http.Header, conf config.App) (bool, string) {
-	for key := range headers {
-		if isForbiddenHeader(key, conf) {
-			return true, key
-		}
-	}
-	return false, ""
 }
 
 func isForbiddenHeader(header string, conf config.App) bool {
