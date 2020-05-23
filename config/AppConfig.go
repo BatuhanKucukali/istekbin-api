@@ -25,6 +25,6 @@ type Redis struct {
 }
 
 type Rate struct {
-	Limit int           `mapstructure:"limit"`
-	Every time.Duration `mapstructure:"every"`
+	Limit  int64           `mapstructure:"limit"`
+	Period time.Duration `mapstructure:"period"`
 }

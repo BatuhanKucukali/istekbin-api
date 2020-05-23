@@ -13,6 +13,7 @@ require (
 	github.com/labstack/gommon v0.3.0
 	github.com/spf13/viper v1.7.0
 	github.com/stretchr/testify v1.5.1
+	github.com/ulule/limiter/v3 v3.5.0
 	github.com/yuin/gopher-lua v0.0.0-20200521060427-6ff375d91eab // indirect
 	golang.org/x/time v0.0.0-20200416051211-89c76fbcd5d1
 )

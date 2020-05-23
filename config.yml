@@ -11,7 +11,7 @@ app:
     - X-Request-Start
 rate:
   limit: 100
-  every: 1m
+  period: 1m
 
 redis:
   host: localhost
