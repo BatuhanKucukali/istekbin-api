@@ -11,14 +11,14 @@ import (
 
 func CreateHandler(conf *config.App, rd *redis.Client) func(c echo.Context) error {
 	return func(c echo.Context) error {
-		u := uuid.New()
+		key := uuid.New().String()
 
-		if err := rd.Set(u.String(), nil, conf.RequestStoreTime).Err(); err != nil {
+		if err := rd.Set(key, nil, conf.RequestStoreTime).Err(); err != nil {
 			log.Error("redis set error.")
 			return echo.NewHTTPError(http.StatusInternalServerError, "request can not created.")
 		}
 
-		c.Response().Header().Add("Location", u.String())
+		c.Response().Header().Add("Location", key)
 		return c.NoContent(http.StatusCreated)
 	}
 }
