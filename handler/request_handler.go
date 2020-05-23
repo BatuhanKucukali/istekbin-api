@@ -93,10 +93,8 @@ func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) err
 
 func isForbiddenHeaderExist(headers http.Header, conf config.App) (bool, string) {
 	for key := range headers {
-		for _, forbiddenHeader := range conf.ForbiddenHeaders {
-			if key == forbiddenHeader {
-				return true, forbiddenHeader
-			}
+		if isForbiddenHeader(key, conf) {
+			return true, key
 		}
 	}
 	return false, ""
