@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/batuhankucukali/istekbin/config"
 	"github.com/google/uuid"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"mime/multipart"
 	"net/http"

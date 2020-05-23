@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/go-redis/redis/v7"
 	"github.com/google/uuid"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"net/http"
 )
 
