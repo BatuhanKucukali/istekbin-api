@@ -30,7 +30,7 @@ func TestRequestHandlerShouldReturnNotFoundWhenUuidIsNotValid(t *testing.T) {
 
 	conf := &config.App{}
 
-	// assertions
+	// Assertions
 	err := RequestHandler(conf, rd)(c)
 	if assert.NotNil(t, err) {
 		rec, ok := err.(*echo.HTTPError)
@@ -56,7 +56,7 @@ func TestRequestHandlerShouldReturnNotFoundWhenKeyIsNotFound(t *testing.T) {
 
 	conf := &config.App{}
 
-	// assertions
+	// Assertions
 	err := RequestHandler(conf, rd)(c)
 	if assert.NotNil(t, err) {
 		rec, ok := err.(*echo.HTTPError)
@@ -94,7 +94,7 @@ func TestRequestHandlerShouldCreateRequest(t *testing.T) {
 
 	rd.Set(key, nil, time.Minute*1)
 
-	// assertions
+	// Assertions
 	if assert.NoError(t, RequestHandler(conf, rd)(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.Equal(t, "ok", rec.Body.String())
@@ -148,7 +148,7 @@ func TestRequestHandlerShouldCreateRequest_WhenBodyIsMultipartFormData(t *testin
 
 	rd.Set(key, nil, time.Minute*1)
 
-	// assertions
+	// Assertions
 	if assert.NoError(t, RequestHandler(conf, rd)(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.Equal(t, "ok", rec.Body.String())

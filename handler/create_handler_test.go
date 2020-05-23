@@ -21,7 +21,7 @@ func TestCreateHandler(t *testing.T) {
 	rd := redisClient()
 	defer teardown()
 
-	// assertions
+	// Assertions
 	if assert.NoError(t, CreateHandler(conf, rd)(c)) {
 		assert.Equal(t, http.StatusCreated, rec.Code)
 	}

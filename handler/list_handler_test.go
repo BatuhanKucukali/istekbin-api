@@ -44,7 +44,7 @@ func TestListHandlerShouldReturnNotFoundWhenUuidIsNotValid(t *testing.T) {
 	rd := redisClient()
 	defer teardown()
 
-	// assertions
+	// Assertions
 	err := ListHandler(rd)(c)
 	if assert.NotNil(t, err) {
 		rec, ok := err.(*echo.HTTPError)
@@ -68,7 +68,7 @@ func TestListHandlerShouldReturnNotFoundWhenKeyIsNotFound(t *testing.T) {
 	rd := redisClient()
 	defer teardown()
 
-	// assertions
+	// Assertions
 	err := ListHandler(rd)(c)
 	if assert.NotNil(t, err) {
 		rec, ok := err.(*echo.HTTPError)
@@ -94,7 +94,7 @@ func TestListHandlerShouldReturnEmptyResponse(t *testing.T) {
 
 	rd.Set(key, nil, time.Minute*1)
 
-	// assertions
+	// Assertions
 	if assert.NoError(t, ListHandler(rd)(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.JSONEq(t, "[]", rec.Body.String())
@@ -118,7 +118,7 @@ func TestListHandlerShouldReturnList(t *testing.T) {
 	defer teardown()
 	rd.Set(key, listJsonString, time.Minute*1)
 
-	// assertions
+	// Assertions
 	if assert.NoError(t, ListHandler(rd)(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.JSONEq(t, listJsonString, rec.Body.String())
