@@ -1,5 +1,4 @@
 app:
-  env: development
   port: 1323
   bodyLimit: 512K
   requestStoreTime: 24h
