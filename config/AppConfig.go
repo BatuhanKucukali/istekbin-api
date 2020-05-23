@@ -9,7 +9,6 @@ type Config struct {
 }
 
 type App struct {
-	Env              string        `mapstructure:"env"`
 	Port             int16         `mapstructure:"port"`
 	BodyLimit        string        `mapstructure:"bodyLimit"`
 	RequestStoreTime time.Duration `mapstructure:"requestStoreTime"`

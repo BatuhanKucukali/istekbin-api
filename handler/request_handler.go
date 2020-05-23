@@ -49,7 +49,7 @@ func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) err
 		r.Uri = getUri(req, u)
 		r.ContentType = contentType
 		r.UserAgent = req.UserAgent()
-		r.Ip = getIp(conf, req)
+		r.Ip = c.RealIP()
 		r.CreatedAt = time.Now()
 		r.Headers = getHeaders(req.Header, *conf)
 		r.Cookies = getCookies(req)
@@ -108,15 +108,8 @@ func getCookies(req *http.Request) map[string]string {
 	return cookieMap
 }
 
-func getIp(conf *config.App, req *http.Request) string {
-	if conf.Env == "production" {
-		return req.Header.Get("X-Forwarded-For")
-	}
-	return req.RemoteAddr
-}
-
 func getUri(req *http.Request, u uuid.UUID) string {
-	return strings.Replace(req.RequestURI, "r/"+u.String()+"/", "", -1)
+	return strings.Replace(req.RequestURI, "/r/"+u.String(), "", 1)
 }
 
 func set(conf *config.App, rd *redis.Client, key string, value interface{}) error {
