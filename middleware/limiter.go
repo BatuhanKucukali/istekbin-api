@@ -3,8 +3,8 @@ package middleware
 import (
 	"fmt"
 	"github.com/batuhankucukali/istekbin/config"
-	"github.com/labstack/echo"
-	_ "github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
+	_ "github.com/labstack/echo/v4"
 	"golang.org/x/time/rate"
 	_ "log"
 	_ "net"
