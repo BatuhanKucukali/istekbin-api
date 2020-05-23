@@ -6,7 +6,7 @@ import (
 	"github.com/batuhankucukali/istekbin/config"
 	"github.com/go-redis/redis/v7"
 	"github.com/google/uuid"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"io"
 	"io/ioutil"
 	"net/http"
