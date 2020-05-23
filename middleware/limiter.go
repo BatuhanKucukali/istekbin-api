@@ -36,7 +36,6 @@ func RateLimit(rc config.Rate, rd redis.Client) echo.MiddlewareFunc {
 			if err != nil {
 				log.Printf("IPRateLimit - ipRateLimiter.Get - err: %v, %s on %s", err, ip, c.Request().URL)
 				return c.JSON(http.StatusInternalServerError, echo.Map{
-					"success": false,
 					"message": err,
 				})
 			}
@@ -53,7 +52,6 @@ func RateLimit(rc config.Rate, rd redis.Client) echo.MiddlewareFunc {
 				})
 			}
 
-			// log.Printf("%s request continue", c.RealIP())
 			return next(c)
 		}
 	}
