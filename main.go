@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/batuhankucukali/istekbin/config"
 	"github.com/batuhankucukali/istekbin/handler"
+	middleware2 "github.com/batuhankucukali/istekbin/middleware"
 	"github.com/go-redis/redis/v7"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -28,6 +29,7 @@ func main() {
 	e.Use(middleware.Recover())
 	e.Pre(middleware.AddTrailingSlash())
 	e.Use(middleware.BodyLimit(conf.AppConfig.BodyLimit))
+	e.Use(middleware2.RateLimit(conf.Rate))
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins:  []string{conf.AppConfig.ClientUrl},

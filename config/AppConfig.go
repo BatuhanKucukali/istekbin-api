@@ -5,6 +5,7 @@ import "time"
 type Config struct {
 	AppConfig   App   `mapstructure:"app"`
 	RedisConfig Redis `mapstructure:"redis"`
+	Rate        Rate `mapstructure:"rate"`
 }
 
 type App struct {
@@ -21,4 +22,9 @@ type Redis struct {
 	Port     int16  `mapstructure:"port"`
 	Password string `mapstructure:"password"`
 	DB       int    `mapstructure:"db"`
+}
+
+type Rate struct {
+	Limit int           `mapstructure:"limit"`
+	Every time.Duration `mapstructure:"every"`
 }
