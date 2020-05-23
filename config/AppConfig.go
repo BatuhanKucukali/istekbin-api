@@ -13,6 +13,7 @@ type App struct {
 	BodyLimit        string        `mapstructure:"bodyLimit"`
 	RequestStoreTime time.Duration `mapstructure:"requestStoreTime"`
 	ClientUrl        string        `mapstructure:"clientUrl"`
+	ForbiddenHeaders []string      `mapstructure:"forbiddenHeaders"`
 }
 
 type Redis struct {
