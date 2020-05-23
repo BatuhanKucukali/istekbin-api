@@ -164,6 +164,38 @@ func TestRequestHandlerShouldCreateRequest_WhenBodyIsMultipartFormData(t *testin
 	}
 }
 
+func TestRequestHandlerShouldReturnBadRequestWhenRequestHasForbiddenHeaders(t *testing.T) {
+	// Setup
+	key := uuid.New().String()
+
+	e := echo.New()
+	req := httptest.NewRequest(http.MethodPost, "/r/", nil)
+	rec := httptest.NewRecorder()
+
+	req.Header.Set("X-Forwarded-For", "192.168.1.1")
+
+	c := e.NewContext(req, rec)
+	c.SetParamNames("uuid")
+	c.SetParamValues(key)
+
+	rd := redisClient()
+	defer teardown()
+
+	conf := &config.App{
+		ForbiddenHeaders: []string{"X-Forwarded-For", "X-Forwarded-Port", "X-Forwarded-Proto", "X-Request-Start"},
+	}
+
+	// Assertions
+	err := RequestHandler(conf, rd)(c)
+	if assert.NotNil(t, err) {
+		rec, ok := err.(*echo.HTTPError)
+		if ok {
+			assert.Equal(t, http.StatusBadRequest, rec.Code)
+			assert.Equal(t, "X-Forwarded-For header is forbidden.", rec.Message)
+		}
+	}
+}
+
 func getRequest(value string) Request {
 	var rl []Request
 	err := json.Unmarshal([]byte(value), &rl)
