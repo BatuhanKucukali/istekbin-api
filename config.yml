@@ -10,7 +10,7 @@ app:
     - X-Forwarded-Proto
     - X-Request-Start
 rate:
-  limit: 30
+  limit: 100
   every: 1m
 
 redis:
