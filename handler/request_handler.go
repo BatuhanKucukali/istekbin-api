@@ -56,7 +56,7 @@ func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) err
 		r.UserAgent = req.UserAgent()
 		r.Ip = getIp(conf, req)
 		r.CreatedAt = time.Now()
-		r.Headers = getHeaders(req.Header)
+		r.Headers = getHeaders(req.Header, *conf)
 		r.Cookies = getCookies(req)
 
 		if isMultipartForm(contentType) {
@@ -102,6 +102,20 @@ func isForbiddenHeaderExist(headers http.Header, conf config.App) (bool, string)
 	return false, ""
 }
 
+func isForbiddenHeader(header string, conf config.App) bool {
+	if len(conf.ForbiddenHeaders) == 0 {
+		return false
+	}
+
+	for _, forbiddenHeader := range conf.ForbiddenHeaders {
+		if header == forbiddenHeader {
+			return true
+		}
+	}
+
+	return false
+}
+
 func getCookies(req *http.Request) map[string]string {
 	var cookieMap = make(map[string]string)
 	for _, c := range req.Cookies() {
@@ -129,10 +143,12 @@ func set(conf *config.App, rd *redis.Client, key string, value interface{}) erro
 	return rd.Set(key, p, conf.RequestStoreTime).Err()
 }
 
-func getHeaders(header http.Header) map[string]string {
+func getHeaders(header http.Header, conf config.App) map[string]string {
 	var headerMap = make(map[string]string)
 	for key, value := range header {
-		headerMap[key] = strings.Join(value, ",")
+		if !isForbiddenHeader(key, conf) {
+			headerMap[key] = strings.Join(value, ",")
+		}
 	}
 	return headerMap
 }
