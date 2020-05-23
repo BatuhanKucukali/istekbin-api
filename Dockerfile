@@ -13,6 +13,7 @@ RUN go mod download
 
 COPY . .
 
+RUN go test ./handler/
 RUN go build -o main .
 
 WORKDIR /dist
