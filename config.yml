@@ -5,10 +5,10 @@ app:
   requestStoreTime: 24h
   clientUrl: http://localhost:8080
   forbiddenHeaders:
-    -X-Forwarded-For
-    -X-Forwarded-Port
-    -X-Forwarded-Proto
-    -X-Request-Start
+    - X-Forwarded-For
+    - X-Forwarded-Port
+    - X-Forwarded-Proto
+    - X-Request-Start
 
 redis:
   host: localhost
