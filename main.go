@@ -24,9 +24,9 @@ func main() {
 
 	e := echo.New()
 
+	e.Pre(middleware.RemoveTrailingSlash())
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
-	e.Pre(middleware.AddTrailingSlash())
 	e.Use(middleware.BodyLimit(conf.AppConfig.BodyLimit))
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
@@ -46,11 +46,17 @@ func main() {
 	}
 
 	e.GET("/", handler.HomeHandler)
-	e.POST("/c/", handler.CreateHandler(&conf.AppConfig, rd))
-	e.GET("/l/:uuid/", handler.ListHandler(rd))
-	e.Any("/r/:uuid/*", handler.RequestHandler(&conf.AppConfig, rd))
+	e.POST("/c", handler.CreateHandler(&conf.AppConfig, rd))
+	e.GET("/l/:uuid", handler.ListHandler(rd))
+	e.Any("/r/:uuid", requestHandler(conf, rd))
+	e.Any("/r/:uuid/", requestHandler(conf, rd))
+	e.Any("/r/:uuid/*", requestHandler(conf, rd))
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", conf.AppConfig.Port)))
+}
+
+func requestHandler(conf config.Config, rd *redis.Client) func(c echo.Context) error {
+	return handler.RequestHandler(&conf.AppConfig, rd)
 }
 
 func initViper() {
