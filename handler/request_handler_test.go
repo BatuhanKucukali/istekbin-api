@@ -164,16 +164,18 @@ func TestRequestHandlerShouldCreateRequest_WhenBodyIsMultipartFormData(t *testin
 	}
 }
 
-func TestRequestHandlerShouldReturnBadRequestWhenRequestHasForbiddenHeaders(t *testing.T) {
+func TestRequestHandlerShouldRemoveForbiddenHeaderFromHeaders(t *testing.T) {
 	// Setup
 	key := uuid.New().String()
 
 	e := echo.New()
-	req := httptest.NewRequest(http.MethodPost, "/r/", nil)
+	req := httptest.NewRequest(http.MethodPost, "/r/"+key+"/", strings.NewReader("ok"))
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	req.Header.Set("X-Forwarded-For", "127.0.0.1")
+	req.RemoteAddr = "192.168.1.1"
+	req.Host = "example.com"
+
 	rec := httptest.NewRecorder()
-
-	req.Header.Set("X-Forwarded-For", "192.168.1.1")
-
 	c := e.NewContext(req, rec)
 	c.SetParamNames("uuid")
 	c.SetParamValues(key)
@@ -185,14 +187,20 @@ func TestRequestHandlerShouldReturnBadRequestWhenRequestHasForbiddenHeaders(t *t
 		ForbiddenHeaders: []string{"X-Forwarded-For", "X-Forwarded-Port", "X-Forwarded-Proto", "X-Request-Start"},
 	}
 
+	rd.Set(key, nil, time.Minute*1)
+
 	// Assertions
-	err := RequestHandler(conf, rd)(c)
-	if assert.NotNil(t, err) {
-		rec, ok := err.(*echo.HTTPError)
-		if ok {
-			assert.Equal(t, http.StatusBadRequest, rec.Code)
-			assert.Equal(t, "X-Forwarded-For header is forbidden.", rec.Message)
+	if assert.NoError(t, RequestHandler(conf, rd)(c)) {
+		assert.Equal(t, http.StatusOK, rec.Code)
+		assert.Equal(t, "ok", rec.Body.String())
+
+		val, err := rd.Get(key).Result()
+		if err != nil {
+			assert.Fail(t, "request not found")
 		}
+
+		result := getRequest(val)
+		assert.Equal(t, map[string]string{"Content-Type": "application/json"}, result.Headers)
 	}
 }
 
