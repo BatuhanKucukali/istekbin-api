@@ -115,7 +115,7 @@ var doc = `{
         "/r/{uuid}": {
             "post": {
                 "description": "Route accept all of http methods. Swagger does not allowed multiple http method.",
-                "summary": "Create request - FOR EXAMPLE!!! - Swagger does not allowed multiple http method.",
+                "summary": "Create request - EXAMPLE!!! - Swagger does not allowed multiple http method.",
                 "parameters": [
                     {
                         "type": "string",

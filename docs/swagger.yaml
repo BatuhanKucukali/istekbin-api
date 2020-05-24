@@ -139,8 +139,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/echo.HTTPError'
-      summary: Create request - FOR EXAMPLE!!! - Swagger does not allowed multiple
-        http method.
+      summary: Create request - EXAMPLE!!! - Swagger does not allowed multiple http
+        method.
 schemes:
 - https
 swagger: "2.0"
