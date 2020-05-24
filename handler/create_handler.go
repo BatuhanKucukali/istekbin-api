@@ -5,6 +5,7 @@ import (
 	"github.com/batuhankucukali/istekbin/config"
 	"github.com/go-redis/redis/v7"
 	"github.com/google/uuid"
+	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
 	"net/http"
 	"time"
@@ -22,7 +23,7 @@ func CreateHandler(conf *config.App, rd *redis.Client) func(c echo.Context) erro
 
 		req := c.Request()
 		r := new(Request)
-		r.Ip = getIp(conf, req)
+		r.Ip = c.RealIP()
 		r.Cookies = getCookies(req) // maybe we change redis key ip to ip-cookie
 
 		result, _ := rd.Get(r.Ip).Result()
