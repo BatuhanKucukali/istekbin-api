@@ -28,7 +28,7 @@ type Request struct {
 }
 
 // Create request
-// @Summary Create request - FOR EXAMPLE!!! - Swagger does not allowed multiple http method.
+// @Summary Create request - EXAMPLE!!! - Swagger does not allowed multiple http method.
 // @Description Route accept all of http methods. Swagger does not allowed multiple http method.
 // @Success 200 {string} string "ok"
 // @Param uuid path string true "uuid"
