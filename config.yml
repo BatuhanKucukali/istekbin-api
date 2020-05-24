@@ -8,6 +8,8 @@ app:
     - X-Forwarded-Port
     - X-Forwarded-Proto
     - X-Request-Start
+  historyCount: 5
+
 rate:
   limit: 100
   period: 1m
