@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"github.com/batuhankucukali/istekbin/config"
 	"github.com/batuhankucukali/istekbin/handler"
+	middleware2 "github.com/batuhankucukali/istekbin/middleware"
 	"github.com/go-redis/redis/v7"
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/spf13/viper"
 	"log"
 	"strings"
@@ -24,17 +25,6 @@ func main() {
 
 	e := echo.New()
 
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
-	e.Pre(middleware.AddTrailingSlash())
-	e.Use(middleware.BodyLimit(conf.AppConfig.BodyLimit))
-
-	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins:  []string{conf.AppConfig.ClientUrl},
-		AllowHeaders:  []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderLocation},
-		ExposeHeaders: []string{echo.HeaderLocation},
-	}))
-
 	rd := redis.NewClient(&redis.Options{
 		Addr:     fmt.Sprintf("%s:%d", conf.RedisConfig.Host, conf.RedisConfig.Port),
 		Password: conf.RedisConfig.Password,
@@ -45,10 +35,26 @@ func main() {
 		log.Fatal("Redis connection error.", err)
 	}
 
+	e.Pre(middleware.RemoveTrailingSlash())
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+	e.Use(middleware.BodyLimit(conf.AppConfig.BodyLimit))
+	e.Use(middleware2.RateLimit(conf.Rate, rd))
+
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins:  []string{conf.AppConfig.ClientUrl},
+		AllowHeaders:  []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderLocation},
+		ExposeHeaders: []string{echo.HeaderLocation},
+	}))
+
 	e.GET("/", handler.HomeHandler)
-	e.POST("/c/", handler.CreateHandler(&conf.AppConfig, rd))
-	e.GET("/l/:uuid/", handler.ListHandler(rd))
-	e.Any("/r/:uuid/*", handler.RequestHandler(&conf.AppConfig, rd))
+	e.POST("/c", handler.CreateHandler(&conf.AppConfig, rd))
+	e.GET("/l/:uuid", handler.ListHandler(rd))
+
+	r := e.Group("/r/:uuid")
+	r.Any("", handler.RequestHandler(&conf.AppConfig, rd))
+	r.Any("/", handler.RequestHandler(&conf.AppConfig, rd))
+	r.Any("/*", handler.RequestHandler(&conf.AppConfig, rd))
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", conf.AppConfig.Port)))
 }

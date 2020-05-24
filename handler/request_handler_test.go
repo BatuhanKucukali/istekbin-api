@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/batuhankucukali/istekbin/config"
 	"github.com/google/uuid"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"mime/multipart"
 	"net/http"
@@ -74,7 +74,6 @@ func TestRequestHandlerShouldCreateRequest(t *testing.T) {
 	req := httptest.NewRequest(http.MethodPost, "/r/"+key+"/", strings.NewReader("ok"))
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	req.Header.Set("User-Agent", "Go-Agent")
-	req.RemoteAddr = "192.168.1.1"
 	req.Host = "example.com"
 
 	cookie := new(http.Cookie)
@@ -108,7 +107,7 @@ func TestRequestHandlerShouldCreateRequest(t *testing.T) {
 		assert.Equal(t, req.Method, result.Method)
 		assert.Equal(t, req.Host, result.Host)
 		assert.Equal(t, req.UserAgent(), result.UserAgent)
-		assert.Equal(t, req.RemoteAddr, result.Ip)
+		assert.Equal(t, c.RealIP(), result.Ip)
 		assert.Equal(t, echo.MIMEApplicationJSON, result.ContentType)
 		assert.Equal(t, convertHeaderToMap(req.Header), result.Headers)
 		assert.Equal(t, convertCookieToMap(req), result.Cookies)
