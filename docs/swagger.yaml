@@ -96,4 +96,50 @@ paths:
           schema:
             $ref: '#/definitions/echo.HTTPError'
       summary: List istekbin
+  /r/{uuid}:
+    post:
+      description: Route accept all of http methods. Swagger does not allowed multiple
+        http method.
+      parameters:
+      - description: uuid
+        in: path
+        name: uuid
+        required: true
+        type: string
+      - description: body
+        in: body
+        name: body
+        schema:
+          type: string
+      - description: world
+        in: formData
+        name: hello
+        type: string
+      - description: world
+        in: header
+        name: hello
+        type: string
+      - description: world
+        in: query
+        name: hello
+        type: string
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      summary: Create request - FOR EXAMPLE!!! - Swagger does not allowed multiple
+        http method.
 swagger: "2.0"

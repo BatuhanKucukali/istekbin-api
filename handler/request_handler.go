@@ -27,6 +27,19 @@ type Request struct {
 	CreatedAt   time.Time         `json:"created_at"`
 }
 
+// Create request
+// @Summary Create request - FOR EXAMPLE!!! - Swagger does not allowed multiple http method.
+// @Description Route accept all of http methods. Swagger does not allowed multiple http method.
+// @Success 200 {string} string "ok"
+// @Param uuid path string true "uuid"
+// @Param body body string false "body"
+// @Param hello formData string false "world"
+// @Param hello header string false "world"
+// @Param hello query string false "world"
+// @Failure 400 {object} echo.HTTPError
+// @Failure 404 {object} echo.HTTPError
+// @Failure 500 {object} echo.HTTPError
+// @Router /r/{uuid} [post]
 func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) error {
 	return func(c echo.Context) error {
 		u, err := uuid.Parse(c.Param("uuid"))

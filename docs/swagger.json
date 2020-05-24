@@ -96,6 +96,73 @@
                     }
                 }
             }
+        },
+        "/r/{uuid}": {
+            "post": {
+                "description": "Route accept all of http methods. Swagger does not allowed multiple http method.",
+                "summary": "Create request - FOR EXAMPLE!!! - Swagger does not allowed multiple http method.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "uuid",
+                        "name": "uuid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "world",
+                        "name": "hello",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "world",
+                        "name": "hello",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
+                        "description": "world",
+                        "name": "hello",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
