@@ -25,7 +25,7 @@ import (
 // @license.name Apache 2.0
 // @license.url https://github.com/BatuhanKucukali/istekbin-api/blob/master/LICENSE
 
-// @host api.istekbin.com
+// @host localhost:1323
 // @BasePath /
 func main() {
 	initViper()

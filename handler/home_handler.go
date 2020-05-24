@@ -5,6 +5,11 @@ import (
 	"net/http"
 )
 
+// Home
+// @Summary Welcome page
+// @Accept  plain
+// @Success 200 {string} string ""
+// @Router / [get]
 func HomeHandler(c echo.Context) error {
 	return c.String(http.StatusOK, "Welcome :)")
 }
