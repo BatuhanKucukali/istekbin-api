@@ -16,7 +16,7 @@ func TestCreateHandler(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 
-	conf := &config.App{}
+	conf := &config.App{HistoryCount: 5}
 
 	rd := redisClient()
 	defer teardown()
@@ -25,4 +25,10 @@ func TestCreateHandler(t *testing.T) {
 	if assert.NoError(t, CreateHandler(conf, rd)(c)) {
 		assert.Equal(t, http.StatusCreated, rec.Code)
 	}
+
+	ip := c.RealIP()
+	items := rd.Get(ip)
+
+	assert.NotEmpty(t, items)
+
 }
