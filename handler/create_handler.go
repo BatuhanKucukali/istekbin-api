@@ -32,7 +32,7 @@ func CreateHandler(conf *config.App, rd *redis.Client) func(c echo.Context) erro
 		json.Unmarshal([]byte(result), &items)
 		items = append(items, Item{Key: key, CreatedAt: time.Now()})
 
-		items = deleteItems(items, rd)
+		items = deleteItems(items, rd, conf.HistoryCount)
 
 		itemBytes, err := json.Marshal(items)
 		if err != nil {
@@ -50,8 +50,8 @@ func CreateHandler(conf *config.App, rd *redis.Client) func(c echo.Context) erro
 	}
 }
 
-func deleteItems(items []Item, rd *redis.Client) []Item {
-	if len(items) > 5 {
+func deleteItems(items []Item, rd *redis.Client, limit int) []Item {
+	if len(items) > limit {
 		rd.Del(items[0].Key)
 		return append(items[:0], items[1:]...)
 	}

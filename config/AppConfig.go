@@ -14,6 +14,7 @@ type App struct {
 	RequestStoreTime time.Duration `mapstructure:"requestStoreTime"`
 	ClientUrl        string        `mapstructure:"clientUrl"`
 	ForbiddenHeaders []string      `mapstructure:"forbiddenHeaders"`
+	HistoryCount 	 int 		   `mapstructure:"historyCount"`
 }
 
 type Redis struct {
