@@ -16,7 +16,6 @@ import (
 )
 
 // @title Istekbin API
-// @version 1.0
 // @description Istekbin is a free service that allows you to collect http request.
 
 // @contact.name API Support
@@ -25,8 +24,9 @@ import (
 // @license.name Apache 2.0
 // @license.url https://github.com/BatuhanKucukali/istekbin-api/blob/master/LICENSE
 
-// @host localhost:1323
+// @host api.istekbin.com
 // @BasePath /
+// @schemes https
 func main() {
 	initViper()
 

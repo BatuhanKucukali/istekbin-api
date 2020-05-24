@@ -32,7 +32,7 @@ definitions:
       user_agent:
         type: string
     type: object
-host: localhost:1323
+host: api.istekbin.com
 info:
   contact:
     name: API Support
@@ -42,7 +42,6 @@ info:
     name: Apache 2.0
     url: https://github.com/BatuhanKucukali/istekbin-api/blob/master/LICENSE
   title: Istekbin API
-  version: "1.0"
 paths:
   /:
     get:
@@ -142,4 +141,6 @@ paths:
             $ref: '#/definitions/echo.HTTPError'
       summary: Create request - FOR EXAMPLE!!! - Swagger does not allowed multiple
         http method.
+schemes:
+- https
 swagger: "2.0"

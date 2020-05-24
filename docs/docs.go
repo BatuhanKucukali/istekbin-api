@@ -244,10 +244,10 @@ type swaggerInfo struct {
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
-	Version:     "1.0",
-	Host:        "localhost:1323",
+	Version:     "",
+	Host:        "api.istekbin.com",
 	BasePath:    "/",
-	Schemes:     []string{},
+	Schemes:     []string{"https"},
 	Title:       "Istekbin API",
 	Description: "Istekbin is a free service that allows you to collect http request.",
 }
