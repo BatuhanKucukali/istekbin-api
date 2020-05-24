@@ -1,0 +1,19 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Istekbin is a free service that allows you to collect http request.",
+        "title": "Istekbin API",
+        "contact": {
+            "name": "API Support",
+            "url": "https://github.com/BatuhanKucukali/istekbin-api/issues/new"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "https://github.com/BatuhanKucukali/istekbin-api/blob/master/LICENSE"
+        },
+        "version": "1.0"
+    },
+    "host": "api.istekbin.com",
+    "basePath": "/",
+    "paths": {}
+}
