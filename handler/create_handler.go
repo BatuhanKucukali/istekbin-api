@@ -20,13 +20,13 @@ type Item struct {
 func CreateHandler(conf *config.App, rd *redis.Client) func(c echo.Context) error {
 	return func(c echo.Context) error {
 		key := uuid.New().String()
+		if err := rd.Set(key, nil, conf.RequestStoreTime).Err(); err != nil {
+			log.Error("uuid set error.")
+			return echo.NewHTTPError(http.StatusInternalServerError, "request can not created.")
+		}
 
-		req := c.Request()
-		r := new(Request)
-		r.Ip = c.RealIP()
-		r.Cookies = getCookies(req) // maybe we change redis key ip to ip-cookie
-
-		result, _ := rd.Get(r.Ip).Result()
+		ipAddress := c.RealIP()
+		result, _ := rd.Get(ipAddress).Result()
 
 		var items []Item
 		json.Unmarshal([]byte(result), &items)
@@ -40,7 +40,7 @@ func CreateHandler(conf *config.App, rd *redis.Client) func(c echo.Context) erro
 			return echo.NewHTTPError(http.StatusInternalServerError, "request can not created.")
 		}
 
-		if err := rd.Set(r.Ip, itemBytes, conf.RequestStoreTime).Err(); err != nil {
+		if err := rd.Set(ipAddress, itemBytes, conf.RequestStoreTime).Err(); err != nil {
 			log.Error("redis set error.")
 			return echo.NewHTTPError(http.StatusInternalServerError, "request can not created.")
 		}
