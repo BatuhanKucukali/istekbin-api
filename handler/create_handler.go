@@ -17,6 +17,12 @@ type Item struct {
 }
 
 
+// Create Istekbin
+// @Summary Create istekbin
+// @Accept  json
+// @Header 201 {string} Location "uuid"
+// @Failure 500 {object} echo.HTTPError
+// @Router /c [post]
 func CreateHandler(conf *config.App, rd *redis.Client) func(c echo.Context) error {
 	return func(c echo.Context) error {
 		key := uuid.New().String()

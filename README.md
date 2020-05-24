@@ -21,6 +21,20 @@ go build
 ./istekbin
 ```
 
+## Swagger
+Regenerate swagger.
+
+1 . Install [swag](https://github.com/swaggo/swag)
+```bash
+go get -u github.com/swaggo/swag/cmd/swag
+```
+
+2 . Generate swagger docs
+```bash
+swag init --parseDependency
+```
+
+
 ## Getting help ##
 
 If you're having trouble getting this project running, feel free to [open an issue](https://github.com/BatuhanKucukali/istekbin-api/issues/new)

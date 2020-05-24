@@ -3,16 +3,30 @@ package main
 import (
 	"fmt"
 	"github.com/batuhankucukali/istekbin/config"
+	_ "github.com/batuhankucukali/istekbin/docs"
 	"github.com/batuhankucukali/istekbin/handler"
 	middleware2 "github.com/batuhankucukali/istekbin/middleware"
 	"github.com/go-redis/redis/v7"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/spf13/viper"
+	echoSwagger "github.com/swaggo/echo-swagger"
 	"log"
 	"strings"
 )
 
+// @title Istekbin API
+// @description Istekbin is a free service that allows you to collect http request.
+
+// @contact.name API Support
+// @contact.url https://github.com/BatuhanKucukali/istekbin-api/issues/new
+
+// @license.name Apache 2.0
+// @license.url https://github.com/BatuhanKucukali/istekbin-api/blob/master/LICENSE
+
+// @host api.istekbin.com
+// @BasePath /
+// @schemes https
 func main() {
 	initViper()
 
@@ -55,6 +69,8 @@ func main() {
 	r.Any("", handler.RequestHandler(&conf.AppConfig, rd))
 	r.Any("/", handler.RequestHandler(&conf.AppConfig, rd))
 	r.Any("/*", handler.RequestHandler(&conf.AppConfig, rd))
+
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", conf.AppConfig.Port)))
 }

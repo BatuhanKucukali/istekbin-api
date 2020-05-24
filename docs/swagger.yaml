@@ -1,0 +1,146 @@
+basePath: /
+definitions:
+  echo.HTTPError:
+    properties:
+      message:
+        type: object
+    type: object
+  handler.Request:
+    properties:
+      body:
+        type: string
+      content_type:
+        type: string
+      cookies:
+        additionalProperties:
+          type: string
+        type: object
+      created_at:
+        type: string
+      headers:
+        additionalProperties:
+          type: string
+        type: object
+      host:
+        type: string
+      ip:
+        type: string
+      method:
+        type: string
+      uri:
+        type: string
+      user_agent:
+        type: string
+    type: object
+host: api.istekbin.com
+info:
+  contact:
+    name: API Support
+    url: https://github.com/BatuhanKucukali/istekbin-api/issues/new
+  description: Istekbin is a free service that allows you to collect http request.
+  license:
+    name: Apache 2.0
+    url: https://github.com/BatuhanKucukali/istekbin-api/blob/master/LICENSE
+  title: Istekbin API
+paths:
+  /:
+    get:
+      consumes:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Welcome page
+  /c:
+    post:
+      consumes:
+      - application/json
+      responses:
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      summary: Create istekbin
+  /l/{uuid}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: uuid
+        in: path
+        name: uuid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/handler.Request'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      summary: List istekbin
+  /r/{uuid}:
+    post:
+      description: Route accept all of http methods. Swagger does not allowed multiple
+        http method.
+      parameters:
+      - description: uuid
+        in: path
+        name: uuid
+        required: true
+        type: string
+      - description: body
+        in: body
+        name: body
+        schema:
+          type: string
+      - description: world
+        in: formData
+        name: hello
+        type: string
+      - description: world
+        in: header
+        name: hello
+        type: string
+      - description: world
+        in: query
+        name: hello
+        type: string
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      summary: Create request - FOR EXAMPLE!!! - Swagger does not allowed multiple
+        http method.
+schemes:
+- https
+swagger: "2.0"
