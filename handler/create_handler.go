@@ -5,7 +5,6 @@ import (
 	"github.com/batuhankucukali/istekbin/config"
 	"github.com/go-redis/redis/v7"
 	"github.com/google/uuid"
-	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
 	"net/http"
 	"time"
