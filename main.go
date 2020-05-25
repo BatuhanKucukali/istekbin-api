@@ -63,6 +63,7 @@ func main() {
 
 	e.GET("/", handler.HomeHandler)
 	e.POST("/c", handler.CreateHandler(&conf.AppConfig, rd))
+	e.GET("/cl", handler.CreateListHandler(rd))
 	e.GET("/l/:uuid", handler.ListHandler(rd))
 
 	r := e.Group("/r/:uuid")
