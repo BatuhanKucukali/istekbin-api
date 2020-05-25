@@ -21,9 +21,9 @@ func TestCreateListHandler(t *testing.T) {
 	rd := redisClient()
 	defer teardown()
 
-	item := Item{Key: uuid.New().String(), CreatedAt: time.Now()}
-	item2 := Item{Key: uuid.New().String(), CreatedAt: time.Now()}
-	items := []Item{item, item2}
+	item := BinItem{Key: uuid.New().String(), CreatedAt: time.Now()}
+	item2 := BinItem{Key: uuid.New().String(), CreatedAt: time.Now()}
+	items := []BinItem{item, item2}
 
 	itemBytes, _ := json.Marshal(items)
 	rd.Set(c.RealIP(), itemBytes, time.Minute*1)
@@ -45,7 +45,7 @@ func TestCreateListHandlerShouldReturnEmptyResponse(t *testing.T) {
 	rd := redisClient()
 	defer teardown()
 
-	itemBytes, _ := json.Marshal([]Item{})
+	itemBytes, _ := json.Marshal([]BinItem{})
 
 	// Assertions
 	if assert.NoError(t, CreateListHandler(rd)(c)) {

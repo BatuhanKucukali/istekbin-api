@@ -11,7 +11,7 @@ import (
 // List of Create Istekbin
 // @Summary List of created istekbin
 // @Produce json
-// @Success 200 {object} []handler.Item
+// @Success 200 {object} []handler.BinItem
 // @Failure 404 {object} echo.HTTPError
 // @Failure 500 {object} echo.HTTPError
 // @Router /cl [get]
@@ -21,13 +21,13 @@ func CreateListHandler(rd *redis.Client) func(c echo.Context) error {
 
 		result, err := rd.Get(key).Result()
 		if err == redis.Nil {
-			return c.JSON(http.StatusOK, []Item{})
+			return c.JSON(http.StatusOK, []BinItem{})
 		} else if err != nil {
 			log.Errorf("redis error. %s", err)
 			return echo.NewHTTPError(http.StatusInternalServerError, "redis error")
 		}
 
-		var items []Item
+		var items []BinItem
 		if err := json.Unmarshal([]byte(result), &items); err != nil {
 			log.Errorf("deserialize error. %s", err)
 			return echo.NewHTTPError(http.StatusInternalServerError, "deserialize error")

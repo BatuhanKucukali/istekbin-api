@@ -11,9 +11,9 @@ import (
 	"time"
 )
 
-type Item struct {
-	Key       string
-	CreatedAt time.Time
+type BinItem struct {
+	Key       string    `json:"key"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 // Create Istekbin
@@ -41,12 +41,12 @@ func CreateHandler(conf *config.App, rd *redis.Client) func(c echo.Context) erro
 func saveList(key string, ipAddress string, conf config.App, rd redis.Client) {
 	result, _ := rd.Get(ipAddress).Result()
 
-	var items []Item
+	var items []BinItem
 	if err := json.Unmarshal([]byte(result), &items); err != nil {
 		log.Errorf("deserialize error. %s", err)
 	}
 
-	items = append([]Item{{Key: key, CreatedAt: time.Now()}}, items...)
+	items = append([]BinItem{{Key: key, CreatedAt: time.Now()}}, items...)
 	items = deleteItemsIfNeeded(items, conf.HistoryCount)
 
 	itemBytes, err := json.Marshal(items)
@@ -59,7 +59,7 @@ func saveList(key string, ipAddress string, conf config.App, rd redis.Client) {
 	}
 }
 
-func deleteItemsIfNeeded(items []Item, limit int) []Item {
+func deleteItemsIfNeeded(items []BinItem, limit int) []BinItem {
 	if len(items) > limit {
 		return items[0:limit]
 	}

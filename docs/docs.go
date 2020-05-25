@@ -75,7 +75,7 @@ var doc = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/handler.Item"
+                                "$ref": "#/definitions/handler.BinItem"
                             }
                         }
                     },
@@ -220,10 +220,10 @@ var doc = `{
                 }
             }
         },
-        "handler.Item": {
+        "handler.BinItem": {
             "type": "object",
             "properties": {
-                "createdAt": {
+                "created_at": {
                     "type": "string"
                 },
                 "key": {

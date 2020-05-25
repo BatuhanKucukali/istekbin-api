@@ -62,7 +62,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/handler.Item"
+                                "$ref": "#/definitions/handler.BinItem"
                             }
                         }
                     },
@@ -207,10 +207,10 @@
                 }
             }
         },
-        "handler.Item": {
+        "handler.BinItem": {
             "type": "object",
             "properties": {
-                "createdAt": {
+                "created_at": {
                     "type": "string"
                 },
                 "key": {

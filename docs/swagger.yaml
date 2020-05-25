@@ -5,9 +5,9 @@ definitions:
       message:
         type: object
     type: object
-  handler.Item:
+  handler.BinItem:
     properties:
-      createdAt:
+      created_at:
         type: string
       key:
         type: string
@@ -79,7 +79,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/handler.Item'
+              $ref: '#/definitions/handler.BinItem'
             type: array
         "404":
           description: Not Found
