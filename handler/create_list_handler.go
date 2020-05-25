@@ -17,7 +17,7 @@ import (
 // @Router /cl [get]
 func CreateListHandler(rd *redis.Client) func(c echo.Context) error {
 	return func(c echo.Context) error {
-		key := c.RealIP()
+		key := c.RealIP() // TODO list key should be ip+fingerprint
 
 		result, err := rd.Get(key).Result()
 		if err == redis.Nil {

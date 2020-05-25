@@ -31,7 +31,7 @@ func CreateHandler(conf *config.App, rd *redis.Client) func(c echo.Context) erro
 			return echo.NewHTTPError(http.StatusInternalServerError, "redis error")
 		}
 
-		go saveList(key, c.RealIP(), *conf, *rd)
+		go saveList(key, c.RealIP(), *conf, *rd) // TODO list key should be ip+fingerprint
 
 		c.Response().Header().Add("Location", key)
 		return c.NoContent(http.StatusCreated)
