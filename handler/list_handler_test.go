@@ -24,12 +24,12 @@ func getRequestListJsonString() string {
 	var rl []Request
 
 	requests := append([]Request{*r, *r2}, rl...)
-	p, err := json.Marshal(requests)
+	requestBytes, err := json.Marshal(requests)
 	if err != nil {
 		fmt.Println("marshaling error")
 	}
 
-	return string(p)
+	return string(requestBytes)
 }
 
 func TestListHandlerShouldReturnNotFoundWhenUuidIsNotValid(t *testing.T) {

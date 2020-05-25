@@ -28,7 +28,7 @@ func ListHandler(rd *redis.Client) func(c echo.Context) error {
 
 		key := u.String()
 
-		reqVal, err := rd.Get(key).Result()
+		result, err := rd.Get(key).Result()
 		if redis.Nil == err {
 			return echo.ErrNotFound
 		} else if err != nil {
@@ -36,12 +36,12 @@ func ListHandler(rd *redis.Client) func(c echo.Context) error {
 			return echo.NewHTTPError(http.StatusInternalServerError, "redis error")
 		}
 
-		if len(reqVal) == 0 {
+		if len(result) == 0 {
 			return c.JSON(http.StatusOK, []Request{})
 		}
 
 		var rl []Request
-		if err := json.Unmarshal([]byte(reqVal), &rl); err != nil {
+		if err := json.Unmarshal([]byte(result), &rl); err != nil {
 			log.Errorf("deserialize error. %s", err)
 			return echo.NewHTTPError(http.StatusInternalServerError, "deserialize error")
 		}

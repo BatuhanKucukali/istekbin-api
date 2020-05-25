@@ -25,13 +25,13 @@ func TestCreateListHandler(t *testing.T) {
 	item2 := Item{Key: uuid.New().String(), CreatedAt: time.Now()}
 	items := []Item{item, item2}
 
-	result, _ := json.Marshal(items)
-	rd.Set(c.RealIP(), result, time.Minute*1)
+	itemBytes, _ := json.Marshal(items)
+	rd.Set(c.RealIP(), itemBytes, time.Minute*1)
 
 	// Assertions
 	if assert.NoError(t, CreateListHandler(rd)(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
-		assert.JSONEq(t, string(result), rec.Body.String())
+		assert.JSONEq(t, string(itemBytes), rec.Body.String())
 	}
 }
 
@@ -45,11 +45,11 @@ func TestCreateListHandlerShouldReturnEmptyResponse(t *testing.T) {
 	rd := redisClient()
 	defer teardown()
 
-	result, _ := json.Marshal([]Item{})
+	itemBytes, _ := json.Marshal([]Item{})
 
 	// Assertions
 	if assert.NoError(t, CreateListHandler(rd)(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
-		assert.JSONEq(t, string(result), rec.Body.String())
+		assert.JSONEq(t, string(itemBytes), rec.Body.String())
 	}
 }
