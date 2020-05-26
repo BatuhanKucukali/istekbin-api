@@ -2,6 +2,12 @@
 
 Istekbin is a free service that allows you to collect http request.
 
+## Clients
+[Istekbin Web](https://github.com/BatuhanKucukali/istekbin-frontend)    
+
+## API Documentation
+[Click to see Swagger](https://api.istekbin.com/swagger/index.html)   
+
 ## Run this project
 
 1 . Clone project on your machine
@@ -35,6 +41,10 @@ If command not working go [here](https://github.com/swaggo/swag/issues/97#issuec
 swag init --parseDependency -dir cmd/istekbin-api/
 ```
 
+## Docker Compose
+```bash
+docker-compose up --build
+```
 
 ## Getting help ##
 
