@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestCreateHandler(t *testing.T) {
+func TestCreateBin(t *testing.T) {
 	// Setup
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodPost, "/c", nil)

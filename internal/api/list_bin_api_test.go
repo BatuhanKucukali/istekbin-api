@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func TestCreateListHandler(t *testing.T) {
+func TestListBin(t *testing.T) {
 	// Setup
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodGet, "/cl", nil)
@@ -35,7 +35,7 @@ func TestCreateListHandler(t *testing.T) {
 	}
 }
 
-func TestCreateListHandlerShouldReturnEmptyResponse(t *testing.T) {
+func TestListBinShouldReturnEmptyResponse(t *testing.T) {
 	// Setup
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodGet, "/cl", nil)

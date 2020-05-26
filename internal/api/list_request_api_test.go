@@ -32,7 +32,7 @@ func getRequestListJsonString() string {
 	return string(requestBytes)
 }
 
-func TestListHandlerShouldReturnNotFoundWhenUuidIsNotValid(t *testing.T) {
+func TestListRequestShouldReturnNotFoundWhenUuidIsNotValid(t *testing.T) {
 	// Setup
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodPost, "/l", nil)
@@ -54,7 +54,7 @@ func TestListHandlerShouldReturnNotFoundWhenUuidIsNotValid(t *testing.T) {
 	}
 }
 
-func TestListHandlerShouldReturnNotFoundWhenKeyIsNotFound(t *testing.T) {
+func TestListRequestShouldReturnNotFoundWhenKeyIsNotFound(t *testing.T) {
 	// Setup
 	key := uuid.New().String()
 
@@ -78,7 +78,7 @@ func TestListHandlerShouldReturnNotFoundWhenKeyIsNotFound(t *testing.T) {
 	}
 }
 
-func TestListHandlerShouldReturnEmptyResponse(t *testing.T) {
+func TestListRequestShouldReturnEmptyResponse(t *testing.T) {
 	// Setup
 	key := uuid.New().String()
 
@@ -101,7 +101,7 @@ func TestListHandlerShouldReturnEmptyResponse(t *testing.T) {
 	}
 }
 
-func TestListHandlerShouldReturnList(t *testing.T) {
+func TestListRequestShouldReturnList(t *testing.T) {
 	// Setup
 	key := uuid.New().String()
 

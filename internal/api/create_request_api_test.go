@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-func TestRequestHandlerShouldReturnNotFoundWhenUuidIsNotValid(t *testing.T) {
+func TestCreateRequestShouldReturnNotFoundWhenUuidIsNotValid(t *testing.T) {
 	// Setup
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodPost, "/r/", nil)
@@ -40,7 +40,7 @@ func TestRequestHandlerShouldReturnNotFoundWhenUuidIsNotValid(t *testing.T) {
 	}
 }
 
-func TestRequestHandlerShouldReturnNotFoundWhenKeyIsNotFound(t *testing.T) {
+func TestCreateRequestShouldReturnNotFoundWhenKeyIsNotFound(t *testing.T) {
 	// Setup
 	key := uuid.New().String()
 
@@ -66,7 +66,7 @@ func TestRequestHandlerShouldReturnNotFoundWhenKeyIsNotFound(t *testing.T) {
 	}
 }
 
-func TestRequestHandlerShouldCreateRequest(t *testing.T) {
+func TestCreateRequestShouldCreateRequest(t *testing.T) {
 	// Setup
 	key := uuid.New().String()
 
@@ -114,7 +114,7 @@ func TestRequestHandlerShouldCreateRequest(t *testing.T) {
 	}
 }
 
-func TestRequestHandlerShouldCreateRequest_WhenBodyIsMultipartFormData(t *testing.T) {
+func TestCreateRequestShouldCreateRequest_WhenBodyIsMultipartFormData(t *testing.T) {
 	// Setup
 	key := uuid.New().String()
 
@@ -163,7 +163,7 @@ func TestRequestHandlerShouldCreateRequest_WhenBodyIsMultipartFormData(t *testin
 	}
 }
 
-func TestRequestHandlerShouldRemoveForbiddenHeaderFromHeaders(t *testing.T) {
+func TestCreateRequestShouldRemoveForbiddenHeaderFromHeaders(t *testing.T) {
 	// Setup
 	key := uuid.New().String()
 
