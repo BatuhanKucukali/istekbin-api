@@ -16,7 +16,7 @@ func Init(conf *config.Configuration, rd *redis.Client) *echo.Echo {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	e.Use(middleware.BodyLimit(conf.AppConfig.BodyLimit))
-	e.Use(RateLimit(&conf.Rate, rd))
+	e.Use(rateLimit(&conf.Rate, rd))
 	e.Use(cors(&conf.AppConfig))
 
 	e.GET("/", api.Home)
