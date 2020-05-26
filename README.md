@@ -14,11 +14,11 @@ cd istekbin-api
 ```
 3 . Build
 ```bash
-go build
+go build ./cmd/istekbin-api
 ```
 4 . Run
 ```bash
-./istekbin
+./istekbin-api
 ```
 
 ## Swagger
