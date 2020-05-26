@@ -1,8 +1,8 @@
-package handler
+package api
 
 import (
 	"encoding/json"
-	"github.com/batuhankucukali/istekbin/config"
+	"github.com/batuhankucukali/istekbin-api/internal/config"
 	"github.com/go-redis/redis/v7"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
@@ -11,18 +11,18 @@ import (
 	"time"
 )
 
-type BinItem struct {
+type Bin struct {
 	Key       string    `json:"key"`
 	CreatedAt time.Time `json:"created_at"`
 }
 
-// Create Istekbin
-// @Summary Create istekbin
+// CreateBin
+// @Summary Create bin
 // @Accept  json
 // @Header 201 {string} Location "uuid"
 // @Failure 500 {object} echo.HTTPError
 // @Router /c [post]
-func CreateHandler(conf *config.App, rd *redis.Client) func(c echo.Context) error {
+func CreateBin(conf *config.App, rd *redis.Client) func(c echo.Context) error {
 	return func(c echo.Context) error {
 		key := uuid.New().String()
 
@@ -41,12 +41,12 @@ func CreateHandler(conf *config.App, rd *redis.Client) func(c echo.Context) erro
 func saveList(key string, ipAddress string, conf config.App, rd redis.Client) {
 	result, _ := rd.Get(ipAddress).Result()
 
-	var items []BinItem
+	var items []Bin
 	if err := json.Unmarshal([]byte(result), &items); err != nil {
 		log.Errorf("deserialize error. %s", err)
 	}
 
-	items = append([]BinItem{{Key: key, CreatedAt: time.Now()}}, items...)
+	items = append([]Bin{{Key: key, CreatedAt: time.Now()}}, items...)
 	items = deleteItemsIfNeeded(items, conf.HistoryCount)
 
 	itemBytes, err := json.Marshal(items)
@@ -59,7 +59,7 @@ func saveList(key string, ipAddress string, conf config.App, rd redis.Client) {
 	}
 }
 
-func deleteItemsIfNeeded(items []BinItem, limit int) []BinItem {
+func deleteItemsIfNeeded(items []Bin, limit int) []Bin {
 	if len(items) > limit {
 		return items[0:limit]
 	}

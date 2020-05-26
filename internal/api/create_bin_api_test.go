@@ -1,7 +1,7 @@
-package handler
+package api
 
 import (
-	"github.com/batuhankucukali/istekbin/config"
+	"github.com/batuhankucukali/istekbin-api/internal/config"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"net/http"
@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestCreateHandler(t *testing.T) {
+func TestCreateBin(t *testing.T) {
 	// Setup
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodPost, "/c", nil)
@@ -22,7 +22,7 @@ func TestCreateHandler(t *testing.T) {
 	defer teardown()
 
 	// Assertions
-	if assert.NoError(t, CreateHandler(conf, rd)(c)) {
+	if assert.NoError(t, CreateBin(conf, rd)(c)) {
 		assert.Equal(t, http.StatusCreated, rec.Code)
 
 		ip := c.RealIP()

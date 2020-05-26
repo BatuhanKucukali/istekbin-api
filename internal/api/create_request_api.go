@@ -1,9 +1,9 @@
-package handler
+package api
 
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/batuhankucukali/istekbin/config"
+	"github.com/batuhankucukali/istekbin-api/internal/config"
 	"github.com/go-redis/redis/v7"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
@@ -27,7 +27,7 @@ type Request struct {
 	CreatedAt   time.Time         `json:"created_at"`
 }
 
-// Create request
+// CreateRequest
 // @Summary Create request - EXAMPLE!!! - Swagger does not allowed multiple http method.
 // @Description Route accept all of http methods. Swagger does not allowed multiple http method.
 // @Success 200 {string} string "ok"
@@ -40,7 +40,7 @@ type Request struct {
 // @Failure 404 {object} echo.HTTPError
 // @Failure 500 {object} echo.HTTPError
 // @Router /r/{uuid} [post]
-func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) error {
+func CreateRequest(conf *config.App, rd *redis.Client) func(c echo.Context) error {
 	return func(c echo.Context) error {
 		u, err := uuid.Parse(c.Param("uuid"))
 		if err != nil {

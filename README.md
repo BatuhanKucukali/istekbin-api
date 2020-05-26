@@ -28,10 +28,11 @@ Regenerate swagger.
 ```bash
 go get -u github.com/swaggo/swag/cmd/swag
 ```
+If command not working go [here](https://github.com/swaggo/swag/issues/97#issuecomment-543134010).
 
 2 . Generate swagger docs
 ```bash
-swag init --parseDependency
+swag init --parseDependency -dir cmd/istekbin-api/
 ```
 
 

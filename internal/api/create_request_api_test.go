@@ -1,10 +1,10 @@
-package handler
+package api
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/batuhankucukali/istekbin/config"
+	"github.com/batuhankucukali/istekbin-api/internal/config"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-func TestRequestHandlerShouldReturnNotFoundWhenUuidIsNotValid(t *testing.T) {
+func TestCreateRequestShouldReturnNotFoundWhenUuidIsNotValid(t *testing.T) {
 	// Setup
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodPost, "/r/", nil)
@@ -31,7 +31,7 @@ func TestRequestHandlerShouldReturnNotFoundWhenUuidIsNotValid(t *testing.T) {
 	conf := &config.App{}
 
 	// Assertions
-	err := RequestHandler(conf, rd)(c)
+	err := CreateRequest(conf, rd)(c)
 	if assert.NotNil(t, err) {
 		rec, ok := err.(*echo.HTTPError)
 		if ok {
@@ -40,7 +40,7 @@ func TestRequestHandlerShouldReturnNotFoundWhenUuidIsNotValid(t *testing.T) {
 	}
 }
 
-func TestRequestHandlerShouldReturnNotFoundWhenKeyIsNotFound(t *testing.T) {
+func TestCreateRequestShouldReturnNotFoundWhenKeyIsNotFound(t *testing.T) {
 	// Setup
 	key := uuid.New().String()
 
@@ -57,7 +57,7 @@ func TestRequestHandlerShouldReturnNotFoundWhenKeyIsNotFound(t *testing.T) {
 	conf := &config.App{}
 
 	// Assertions
-	err := RequestHandler(conf, rd)(c)
+	err := CreateRequest(conf, rd)(c)
 	if assert.NotNil(t, err) {
 		rec, ok := err.(*echo.HTTPError)
 		if ok {
@@ -66,7 +66,7 @@ func TestRequestHandlerShouldReturnNotFoundWhenKeyIsNotFound(t *testing.T) {
 	}
 }
 
-func TestRequestHandlerShouldCreateRequest(t *testing.T) {
+func TestCreateRequestShouldCreateRequest(t *testing.T) {
 	// Setup
 	key := uuid.New().String()
 
@@ -94,7 +94,7 @@ func TestRequestHandlerShouldCreateRequest(t *testing.T) {
 	rd.Set(key, nil, time.Minute*1)
 
 	// Assertions
-	if assert.NoError(t, RequestHandler(conf, rd)(c)) {
+	if assert.NoError(t, CreateRequest(conf, rd)(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.Equal(t, "ok", rec.Body.String())
 
@@ -114,7 +114,7 @@ func TestRequestHandlerShouldCreateRequest(t *testing.T) {
 	}
 }
 
-func TestRequestHandlerShouldCreateRequest_WhenBodyIsMultipartFormData(t *testing.T) {
+func TestCreateRequestShouldCreateRequest_WhenBodyIsMultipartFormData(t *testing.T) {
 	// Setup
 	key := uuid.New().String()
 
@@ -148,7 +148,7 @@ func TestRequestHandlerShouldCreateRequest_WhenBodyIsMultipartFormData(t *testin
 	rd.Set(key, nil, time.Minute*1)
 
 	// Assertions
-	if assert.NoError(t, RequestHandler(conf, rd)(c)) {
+	if assert.NoError(t, CreateRequest(conf, rd)(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.Equal(t, "ok", rec.Body.String())
 
@@ -163,7 +163,7 @@ func TestRequestHandlerShouldCreateRequest_WhenBodyIsMultipartFormData(t *testin
 	}
 }
 
-func TestRequestHandlerShouldRemoveForbiddenHeaderFromHeaders(t *testing.T) {
+func TestCreateRequestShouldRemoveForbiddenHeaderFromHeaders(t *testing.T) {
 	// Setup
 	key := uuid.New().String()
 
@@ -189,7 +189,7 @@ func TestRequestHandlerShouldRemoveForbiddenHeaderFromHeaders(t *testing.T) {
 	rd.Set(key, nil, time.Minute*1)
 
 	// Assertions
-	if assert.NoError(t, RequestHandler(conf, rd)(c)) {
+	if assert.NoError(t, CreateRequest(conf, rd)(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.Equal(t, "ok", rec.Body.String())
 

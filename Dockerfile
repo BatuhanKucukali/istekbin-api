@@ -1,4 +1,4 @@
-FROM golang:alpine
+FROM golang:1.14-alpine AS builder
 
 ENV GO111MODULE=on \
     CGO_ENABLED=0 \
@@ -13,15 +13,16 @@ RUN go mod download
 
 COPY . .
 
-RUN go test ./handler/
-RUN go build -o main .
+RUN go test ./internal/api/
+RUN go build -o istekbin-api ./cmd/istekbin-api
 
-WORKDIR /dist
+FROM alpine:3.11
 
-COPY config.yml .
+WORKDIR /app
 
-RUN cp /build/main .
+COPY --from=builder build/istekbin-api .
+COPY --from=builder build/configs/config.yml configs/config.yml
 
 EXPOSE 1323
 
-CMD ["/dist/main"]
+CMD ["/app/istekbin-api"]

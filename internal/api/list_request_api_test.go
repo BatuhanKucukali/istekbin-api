@@ -1,4 +1,4 @@
-package handler
+package api
 
 import (
 	"encoding/json"
@@ -32,7 +32,7 @@ func getRequestListJsonString() string {
 	return string(requestBytes)
 }
 
-func TestListHandlerShouldReturnNotFoundWhenUuidIsNotValid(t *testing.T) {
+func TestListRequestShouldReturnNotFoundWhenUuidIsNotValid(t *testing.T) {
 	// Setup
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodPost, "/l", nil)
@@ -45,7 +45,7 @@ func TestListHandlerShouldReturnNotFoundWhenUuidIsNotValid(t *testing.T) {
 	defer teardown()
 
 	// Assertions
-	err := ListHandler(rd)(c)
+	err := ListRequest(rd)(c)
 	if assert.NotNil(t, err) {
 		rec, ok := err.(*echo.HTTPError)
 		if ok {
@@ -54,7 +54,7 @@ func TestListHandlerShouldReturnNotFoundWhenUuidIsNotValid(t *testing.T) {
 	}
 }
 
-func TestListHandlerShouldReturnNotFoundWhenKeyIsNotFound(t *testing.T) {
+func TestListRequestShouldReturnNotFoundWhenKeyIsNotFound(t *testing.T) {
 	// Setup
 	key := uuid.New().String()
 
@@ -69,7 +69,7 @@ func TestListHandlerShouldReturnNotFoundWhenKeyIsNotFound(t *testing.T) {
 	defer teardown()
 
 	// Assertions
-	err := ListHandler(rd)(c)
+	err := ListRequest(rd)(c)
 	if assert.NotNil(t, err) {
 		rec, ok := err.(*echo.HTTPError)
 		if ok {
@@ -78,7 +78,7 @@ func TestListHandlerShouldReturnNotFoundWhenKeyIsNotFound(t *testing.T) {
 	}
 }
 
-func TestListHandlerShouldReturnEmptyResponse(t *testing.T) {
+func TestListRequestShouldReturnEmptyResponse(t *testing.T) {
 	// Setup
 	key := uuid.New().String()
 
@@ -95,13 +95,13 @@ func TestListHandlerShouldReturnEmptyResponse(t *testing.T) {
 	rd.Set(key, nil, time.Minute*1)
 
 	// Assertions
-	if assert.NoError(t, ListHandler(rd)(c)) {
+	if assert.NoError(t, ListRequest(rd)(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.JSONEq(t, "[]", rec.Body.String())
 	}
 }
 
-func TestListHandlerShouldReturnList(t *testing.T) {
+func TestListRequestShouldReturnList(t *testing.T) {
 	// Setup
 	key := uuid.New().String()
 
@@ -119,7 +119,7 @@ func TestListHandlerShouldReturnList(t *testing.T) {
 	rd.Set(key, listJsonString, time.Minute*1)
 
 	// Assertions
-	if assert.NoError(t, ListHandler(rd)(c)) {
+	if assert.NoError(t, ListRequest(rd)(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.JSONEq(t, listJsonString, rec.Body.String())
 	}

@@ -52,7 +52,7 @@ var doc = `{
                 "consumes": [
                     "application/json"
                 ],
-                "summary": "Create istekbin",
+                "summary": "Create bin",
                 "responses": {
                     "500": {
                         "description": "Internal Server Error",
@@ -68,14 +68,14 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "List of created istekbin",
+                "summary": "List of created bin",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/handler.BinItem"
+                                "$ref": "#/definitions/api.Bin"
                             }
                         }
                     },
@@ -102,7 +102,7 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "List istekbin",
+                "summary": "List of created request",
                 "parameters": [
                     {
                         "type": "string",
@@ -118,7 +118,7 @@ var doc = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/handler.Request"
+                                "$ref": "#/definitions/api.Request"
                             }
                         }
                     },
@@ -212,15 +212,7 @@ var doc = `{
         }
     },
     "definitions": {
-        "echo.HTTPError": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "object"
-                }
-            }
-        },
-        "handler.BinItem": {
+        "api.Bin": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -231,7 +223,7 @@ var doc = `{
                 }
             }
         },
-        "handler.Request": {
+        "api.Request": {
             "type": "object",
             "properties": {
                 "body": {
@@ -269,6 +261,14 @@ var doc = `{
                 },
                 "user_agent": {
                     "type": "string"
+                }
+            }
+        },
+        "echo.HTTPError": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "object"
                 }
             }
         }

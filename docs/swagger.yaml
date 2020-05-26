@@ -1,18 +1,13 @@
 basePath: /
 definitions:
-  echo.HTTPError:
-    properties:
-      message:
-        type: object
-    type: object
-  handler.BinItem:
+  api.Bin:
     properties:
       created_at:
         type: string
       key:
         type: string
     type: object
-  handler.Request:
+  api.Request:
     properties:
       body:
         type: string
@@ -38,6 +33,11 @@ definitions:
         type: string
       user_agent:
         type: string
+    type: object
+  echo.HTTPError:
+    properties:
+      message:
+        type: object
     type: object
 host: api.istekbin.com
 info:
@@ -69,7 +69,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/echo.HTTPError'
-      summary: Create istekbin
+      summary: Create bin
   /cl:
     get:
       produces:
@@ -79,7 +79,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/handler.BinItem'
+              $ref: '#/definitions/api.Bin'
             type: array
         "404":
           description: Not Found
@@ -89,7 +89,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/echo.HTTPError'
-      summary: List of created istekbin
+      summary: List of created bin
   /l/{uuid}:
     get:
       consumes:
@@ -107,7 +107,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/handler.Request'
+              $ref: '#/definitions/api.Request'
             type: array
         "400":
           description: Bad Request
@@ -121,11 +121,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/echo.HTTPError'
-      summary: List istekbin
+      summary: List of created request
   /r/{uuid}:
     post:
-      description: Route accept all of http methods. Swagger does not allowed multiple
-        http method.
+      description: Route accept all of http methods. Swagger does not allowed multiple http method.
       parameters:
       - description: uuid
         in: path
@@ -166,8 +165,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/echo.HTTPError'
-      summary: Create request - EXAMPLE!!! - Swagger does not allowed multiple http
-        method.
+      summary: Create request - EXAMPLE!!! - Swagger does not allowed multiple http method.
 schemes:
 - https
 swagger: "2.0"

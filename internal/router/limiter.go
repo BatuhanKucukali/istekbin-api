@@ -1,7 +1,7 @@
-package middleware
+package router
 
 import (
-	"github.com/batuhankucukali/istekbin/config"
+	"github.com/batuhankucukali/istekbin-api/internal/config"
 	"github.com/labstack/echo/v4"
 	_ "github.com/labstack/echo/v4"
 	"github.com/ulule/limiter/v3"
@@ -18,10 +18,10 @@ var (
 	store         limiter.Store
 )
 
-func RateLimit(rc config.Rate, rd redis.Client) echo.MiddlewareFunc {
+func rateLimit(conf *config.Rate, rd redis.Client) echo.MiddlewareFunc {
 	rate := limiter.Rate{
-		Period: rc.Period,
-		Limit:  rc.Limit,
+		Period: conf.Period,
+		Limit:  conf.Limit,
 	}
 	store, err := redis.NewStore(rd)
 	if err != nil {

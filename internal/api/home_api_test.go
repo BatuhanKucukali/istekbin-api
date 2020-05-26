@@ -1,4 +1,4 @@
-package handler
+package api
 
 import (
 	"github.com/labstack/echo/v4"
@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestHomeHandler(t *testing.T) {
+func TestHome(t *testing.T) {
 	// Setup
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
@@ -16,7 +16,7 @@ func TestHomeHandler(t *testing.T) {
 	c := e.NewContext(req, rec)
 
 	// Assertions
-	if assert.NoError(t, HomeHandler(c)) {
+	if assert.NoError(t, Home(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.Equal(t, "Welcome :)", rec.Body.String())
 	}

@@ -1,4 +1,4 @@
-package handler
+package api
 
 import (
 	"encoding/json"
@@ -9,17 +9,17 @@ import (
 	"net/http"
 )
 
-// List Istekbin
-// @Summary List istekbin
+// ListRequest
+// @Summary List of created request
 // @Accept  json
 // @Produce json
-// @Success 200 {object} []handler.Request
+// @Success 200 {object} []Request
 // @Param uuid path string true "uuid"
 // @Failure 400 {object} echo.HTTPError
 // @Failure 404 {object} echo.HTTPError
 // @Failure 500 {object} echo.HTTPError
 // @Router /l/{uuid} [get]
-func ListHandler(rd *redis.Client) func(c echo.Context) error {
+func ListRequest(rd *redis.Client) func(c echo.Context) error {
 	return func(c echo.Context) error {
 		u, err := uuid.Parse(c.Param("uuid"))
 		if err != nil {
