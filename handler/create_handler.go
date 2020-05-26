@@ -11,11 +11,10 @@ import (
 	"time"
 )
 
-type Item struct {
-	Key         string
-	CreatedAt   time.Time
+type BinItem struct {
+	Key       string    `json:"key"`
+	CreatedAt time.Time `json:"created_at"`
 }
-
 
 // Create Istekbin
 // @Summary Create istekbin
@@ -26,40 +25,43 @@ type Item struct {
 func CreateHandler(conf *config.App, rd *redis.Client) func(c echo.Context) error {
 	return func(c echo.Context) error {
 		key := uuid.New().String()
+
 		if err := rd.Set(key, nil, conf.RequestStoreTime).Err(); err != nil {
-			log.Error("uuid set error.")
-			return echo.NewHTTPError(http.StatusInternalServerError, "request can not created.")
+			log.Errorf("redis error. %s", err)
+			return echo.NewHTTPError(http.StatusInternalServerError, "redis error")
 		}
 
-		ipAddress := c.RealIP()
-		result, _ := rd.Get(ipAddress).Result()
-
-		var items []Item
-		json.Unmarshal([]byte(result), &items)
-		items = append(items, Item{Key: key, CreatedAt: time.Now()})
-
-		items = deleteItems(items, rd, conf.HistoryCount)
-
-		itemBytes, err := json.Marshal(items)
-		if err != nil {
-			log.Error("json marshal error.")
-			return echo.NewHTTPError(http.StatusInternalServerError, "request can not created.")
-		}
-
-		if err := rd.Set(ipAddress, itemBytes, conf.RequestStoreTime).Err(); err != nil {
-			log.Error("redis set error.")
-			return echo.NewHTTPError(http.StatusInternalServerError, "request can not created.")
-		}
+		go saveList(key, c.RealIP(), *conf, *rd) // TODO list key should be ip+fingerprint
 
 		c.Response().Header().Add("Location", key)
 		return c.NoContent(http.StatusCreated)
 	}
 }
 
-func deleteItems(items []Item, rd *redis.Client, limit int) []Item {
+func saveList(key string, ipAddress string, conf config.App, rd redis.Client) {
+	result, _ := rd.Get(ipAddress).Result()
+
+	var items []BinItem
+	if err := json.Unmarshal([]byte(result), &items); err != nil {
+		log.Errorf("deserialize error. %s", err)
+	}
+
+	items = append([]BinItem{{Key: key, CreatedAt: time.Now()}}, items...)
+	items = deleteItemsIfNeeded(items, conf.HistoryCount)
+
+	itemBytes, err := json.Marshal(items)
+	if err != nil {
+		log.Errorf("serialize error. %s", err)
+	}
+
+	if err := rd.Set(ipAddress, itemBytes, conf.RequestStoreTime).Err(); err != nil {
+		log.Errorf("redis error. %s", err)
+	}
+}
+
+func deleteItemsIfNeeded(items []BinItem, limit int) []BinItem {
 	if len(items) > limit {
-		rd.Del(items[0].Key)
-		return append(items[:0], items[1:]...)
+		return items[0:limit]
 	}
 	return items
 }

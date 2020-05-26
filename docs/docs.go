@@ -63,6 +63,37 @@ var doc = `{
                 }
             }
         },
+        "/cl": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "List of created istekbin",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/handler.BinItem"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
         "/l/{uuid}": {
             "get": {
                 "consumes": [
@@ -186,6 +217,17 @@ var doc = `{
             "properties": {
                 "message": {
                     "type": "object"
+                }
+            }
+        },
+        "handler.BinItem": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "key": {
+                    "type": "string"
                 }
             }
         },

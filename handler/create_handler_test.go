@@ -12,7 +12,7 @@ import (
 func TestCreateHandler(t *testing.T) {
 	// Setup
 	e := echo.New()
-	req := httptest.NewRequest(http.MethodPost, "/create/", nil)
+	req := httptest.NewRequest(http.MethodPost, "/c", nil)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 
@@ -24,11 +24,10 @@ func TestCreateHandler(t *testing.T) {
 	// Assertions
 	if assert.NoError(t, CreateHandler(conf, rd)(c)) {
 		assert.Equal(t, http.StatusCreated, rec.Code)
+
+		ip := c.RealIP()
+		items := rd.Get(ip)
+
+		assert.NotEmpty(t, items)
 	}
-
-	ip := c.RealIP()
-	items := rd.Get(ip)
-
-	assert.NotEmpty(t, items)
-
 }

@@ -47,7 +47,7 @@ func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) err
 			return echo.ErrNotFound
 		}
 
-		reqVal, err := rd.Get(u.String()).Result()
+		result, err := rd.Get(u.String()).Result()
 		if err != nil {
 			return echo.ErrNotFound
 		}
@@ -83,8 +83,8 @@ func RequestHandler(conf *config.App, rd *redis.Client) func(c echo.Context) err
 		}
 		var rl []Request
 
-		if len(reqVal) > 0 {
-			if err := json.Unmarshal([]byte(reqVal), &rl); err != nil {
+		if len(result) > 0 {
+			if err := json.Unmarshal([]byte(result), &rl); err != nil {
 				return echo.NewHTTPError(http.StatusInternalServerError, "request can not deserialized.")
 			}
 		}
@@ -126,11 +126,11 @@ func getUri(req *http.Request, u uuid.UUID) string {
 }
 
 func set(conf *config.App, rd *redis.Client, key string, value interface{}) error {
-	p, err := json.Marshal(value)
+	requestBytes, err := json.Marshal(value)
 	if err != nil {
 		return err
 	}
-	return rd.Set(key, p, conf.RequestStoreTime).Err()
+	return rd.Set(key, requestBytes, conf.RequestStoreTime).Err()
 }
 
 func getHeaders(header http.Header, conf config.App) map[string]string {
