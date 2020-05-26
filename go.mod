@@ -1,4 +1,4 @@
-module github.com/batuhankucukali/istekbin
+module github.com/batuhankucukali/istekbin-api
 
 go 1.14
 

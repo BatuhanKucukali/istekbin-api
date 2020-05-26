@@ -2,7 +2,7 @@ package datastore
 
 import (
 	"fmt"
-	"github.com/batuhankucukali/istekbin/internal/config"
+	"github.com/batuhankucukali/istekbin-api/internal/config"
 	"github.com/go-redis/redis/v7"
 	"log"
 )

@@ -3,7 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/batuhankucukali/istekbin/internal/config"
+	"github.com/batuhankucukali/istekbin-api/internal/config"
 	"github.com/go-redis/redis/v7"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"

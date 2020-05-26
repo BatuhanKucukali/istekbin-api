@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	_ "github.com/batuhankucukali/istekbin/docs"
-	"github.com/batuhankucukali/istekbin/internal/config"
-	"github.com/batuhankucukali/istekbin/internal/datastore"
-	"github.com/batuhankucukali/istekbin/internal/router"
+	_ "github.com/batuhankucukali/istekbin-api/docs"
+	"github.com/batuhankucukali/istekbin-api/internal/config"
+	"github.com/batuhankucukali/istekbin-api/internal/datastore"
+	"github.com/batuhankucukali/istekbin-api/internal/router"
 )
 
 // @title Istekbin API

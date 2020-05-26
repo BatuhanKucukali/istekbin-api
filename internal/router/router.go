@@ -1,8 +1,8 @@
 package router
 
 import (
-	"github.com/batuhankucukali/istekbin/internal/api"
-	"github.com/batuhankucukali/istekbin/internal/config"
+	"github.com/batuhankucukali/istekbin-api/internal/api"
+	"github.com/batuhankucukali/istekbin-api/internal/config"
 	"github.com/go-redis/redis/v7"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
