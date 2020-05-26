@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestHomeHandler(t *testing.T) {
+func TestHome(t *testing.T) {
 	// Setup
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodGet, "/", nil)

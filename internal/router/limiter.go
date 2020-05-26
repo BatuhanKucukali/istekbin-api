@@ -18,10 +18,10 @@ var (
 	store         limiter.Store
 )
 
-func RateLimit(rc config.Rate, rd redis.Client) echo.MiddlewareFunc {
+func RateLimit(conf config.Rate, rd redis.Client) echo.MiddlewareFunc {
 	rate := limiter.Rate{
-		Period: rc.Period,
-		Limit:  rc.Limit,
+		Period: conf.Period,
+		Limit:  conf.Limit,
 	}
 	store, err := redis.NewStore(rd)
 	if err != nil {
