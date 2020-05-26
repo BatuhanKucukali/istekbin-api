@@ -1,10 +1,10 @@
-package handler
+package api
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/batuhankucukali/istekbin/config"
+	"github.com/batuhankucukali/istekbin/internal/config"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"

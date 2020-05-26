@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/batuhankucukali/istekbin/config"
 	_ "github.com/batuhankucukali/istekbin/docs"
-	"github.com/batuhankucukali/istekbin/handler"
+	"github.com/batuhankucukali/istekbin/internal/api"
+	"github.com/batuhankucukali/istekbin/internal/config"
 	middleware2 "github.com/batuhankucukali/istekbin/middleware"
 	"github.com/go-redis/redis/v7"
 	"github.com/labstack/echo/v4"
@@ -61,15 +61,15 @@ func main() {
 		ExposeHeaders: []string{echo.HeaderLocation},
 	}))
 
-	e.GET("/", handler.HomeHandler)
-	e.POST("/c", handler.CreateHandler(&conf.AppConfig, rd))
-	e.GET("/cl", handler.CreateListHandler(rd))
-	e.GET("/l/:uuid", handler.ListHandler(rd))
+	e.GET("/", api.HomeHandler)
+	e.POST("/c", api.CreateHandler(&conf.AppConfig, rd))
+	e.GET("/cl", api.CreateListHandler(rd))
+	e.GET("/l/:uuid", api.ListHandler(rd))
 
 	r := e.Group("/r/:uuid")
-	r.Any("", handler.RequestHandler(&conf.AppConfig, rd))
-	r.Any("/", handler.RequestHandler(&conf.AppConfig, rd))
-	r.Any("/*", handler.RequestHandler(&conf.AppConfig, rd))
+	r.Any("", api.RequestHandler(&conf.AppConfig, rd))
+	r.Any("/", api.RequestHandler(&conf.AppConfig, rd))
+	r.Any("/*", api.RequestHandler(&conf.AppConfig, rd))
 
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
 

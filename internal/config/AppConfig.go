@@ -5,7 +5,7 @@ import "time"
 type Config struct {
 	AppConfig   App   `mapstructure:"app"`
 	RedisConfig Redis `mapstructure:"redis"`
-	Rate        Rate `mapstructure:"rate"`
+	Rate        Rate  `mapstructure:"rate"`
 }
 
 type App struct {
