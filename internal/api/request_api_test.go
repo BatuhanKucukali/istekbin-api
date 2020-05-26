@@ -31,7 +31,7 @@ func TestRequestHandlerShouldReturnNotFoundWhenUuidIsNotValid(t *testing.T) {
 	conf := &config.App{}
 
 	// Assertions
-	err := RequestHandler(conf, rd)(c)
+	err := CreateRequest(conf, rd)(c)
 	if assert.NotNil(t, err) {
 		rec, ok := err.(*echo.HTTPError)
 		if ok {
@@ -57,7 +57,7 @@ func TestRequestHandlerShouldReturnNotFoundWhenKeyIsNotFound(t *testing.T) {
 	conf := &config.App{}
 
 	// Assertions
-	err := RequestHandler(conf, rd)(c)
+	err := CreateRequest(conf, rd)(c)
 	if assert.NotNil(t, err) {
 		rec, ok := err.(*echo.HTTPError)
 		if ok {
@@ -94,7 +94,7 @@ func TestRequestHandlerShouldCreateRequest(t *testing.T) {
 	rd.Set(key, nil, time.Minute*1)
 
 	// Assertions
-	if assert.NoError(t, RequestHandler(conf, rd)(c)) {
+	if assert.NoError(t, CreateRequest(conf, rd)(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.Equal(t, "ok", rec.Body.String())
 
@@ -148,7 +148,7 @@ func TestRequestHandlerShouldCreateRequest_WhenBodyIsMultipartFormData(t *testin
 	rd.Set(key, nil, time.Minute*1)
 
 	// Assertions
-	if assert.NoError(t, RequestHandler(conf, rd)(c)) {
+	if assert.NoError(t, CreateRequest(conf, rd)(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.Equal(t, "ok", rec.Body.String())
 
@@ -189,7 +189,7 @@ func TestRequestHandlerShouldRemoveForbiddenHeaderFromHeaders(t *testing.T) {
 	rd.Set(key, nil, time.Minute*1)
 
 	// Assertions
-	if assert.NoError(t, RequestHandler(conf, rd)(c)) {
+	if assert.NoError(t, CreateRequest(conf, rd)(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.Equal(t, "ok", rec.Body.String())
 

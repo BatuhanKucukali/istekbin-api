@@ -21,15 +21,15 @@ func TestCreateListHandler(t *testing.T) {
 	rd := redisClient()
 	defer teardown()
 
-	item := BinItem{Key: uuid.New().String(), CreatedAt: time.Now()}
-	item2 := BinItem{Key: uuid.New().String(), CreatedAt: time.Now()}
-	items := []BinItem{item, item2}
+	item := Bin{Key: uuid.New().String(), CreatedAt: time.Now()}
+	item2 := Bin{Key: uuid.New().String(), CreatedAt: time.Now()}
+	items := []Bin{item, item2}
 
 	itemBytes, _ := json.Marshal(items)
 	rd.Set(c.RealIP(), itemBytes, time.Minute*1)
 
 	// Assertions
-	if assert.NoError(t, CreateList(rd)(c)) {
+	if assert.NoError(t, ListBin(rd)(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.JSONEq(t, string(itemBytes), rec.Body.String())
 	}
@@ -45,10 +45,10 @@ func TestCreateListHandlerShouldReturnEmptyResponse(t *testing.T) {
 	rd := redisClient()
 	defer teardown()
 
-	itemBytes, _ := json.Marshal([]BinItem{})
+	itemBytes, _ := json.Marshal([]Bin{})
 
 	// Assertions
-	if assert.NoError(t, CreateList(rd)(c)) {
+	if assert.NoError(t, ListBin(rd)(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.JSONEq(t, string(itemBytes), rec.Body.String())
 	}
