@@ -8,10 +8,10 @@ import (
 	"net/http"
 )
 
-// List Bin
+// ListBin
 // @Summary List of created bin
 // @Produce json
-// @Success 200 {object} []handler.Bin
+// @Success 200 {object} []Bin
 // @Failure 404 {object} echo.HTTPError
 // @Failure 500 {object} echo.HTTPError
 // @Router /cl [get]

@@ -27,7 +27,7 @@ type Request struct {
 	CreatedAt   time.Time         `json:"created_at"`
 }
 
-// Create Request
+// CreateRequest
 // @Summary Create request - EXAMPLE!!! - Swagger does not allowed multiple http method.
 // @Description Route accept all of http methods. Swagger does not allowed multiple http method.
 // @Success 200 {string} string "ok"

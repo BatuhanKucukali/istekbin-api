@@ -13,7 +13,7 @@ import (
 // @Summary List of created request
 // @Accept  json
 // @Produce json
-// @Success 200 {object} []handler.Request
+// @Success 200 {object} []Request
 // @Param uuid path string true "uuid"
 // @Failure 400 {object} echo.HTTPError
 // @Failure 404 {object} echo.HTTPError
