@@ -5,7 +5,7 @@ import (
 	_ "github.com/batuhankucukali/istekbin/docs"
 	"github.com/batuhankucukali/istekbin/internal/api"
 	"github.com/batuhankucukali/istekbin/internal/config"
-	middleware2 "github.com/batuhankucukali/istekbin/middleware"
+	middleware2 "github.com/batuhankucukali/istekbin/internal/middleware"
 	"github.com/go-redis/redis/v7"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
