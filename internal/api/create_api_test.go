@@ -22,7 +22,7 @@ func TestCreateHandler(t *testing.T) {
 	defer teardown()
 
 	// Assertions
-	if assert.NoError(t, CreateHandler(conf, rd)(c)) {
+	if assert.NoError(t, Create(conf, rd)(c)) {
 		assert.Equal(t, http.StatusCreated, rec.Code)
 
 		ip := c.RealIP()

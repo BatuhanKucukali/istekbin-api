@@ -10,6 +10,6 @@ import (
 // @Accept  plain
 // @Success 200 {string} string ""
 // @Router / [get]
-func HomeHandler(c echo.Context) error {
+func Home(c echo.Context) error {
 	return c.String(http.StatusOK, "Welcome :)")
 }

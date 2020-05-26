@@ -45,7 +45,7 @@ func TestListHandlerShouldReturnNotFoundWhenUuidIsNotValid(t *testing.T) {
 	defer teardown()
 
 	// Assertions
-	err := ListHandler(rd)(c)
+	err := List(rd)(c)
 	if assert.NotNil(t, err) {
 		rec, ok := err.(*echo.HTTPError)
 		if ok {
@@ -69,7 +69,7 @@ func TestListHandlerShouldReturnNotFoundWhenKeyIsNotFound(t *testing.T) {
 	defer teardown()
 
 	// Assertions
-	err := ListHandler(rd)(c)
+	err := List(rd)(c)
 	if assert.NotNil(t, err) {
 		rec, ok := err.(*echo.HTTPError)
 		if ok {
@@ -95,7 +95,7 @@ func TestListHandlerShouldReturnEmptyResponse(t *testing.T) {
 	rd.Set(key, nil, time.Minute*1)
 
 	// Assertions
-	if assert.NoError(t, ListHandler(rd)(c)) {
+	if assert.NoError(t, List(rd)(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.JSONEq(t, "[]", rec.Body.String())
 	}
@@ -119,7 +119,7 @@ func TestListHandlerShouldReturnList(t *testing.T) {
 	rd.Set(key, listJsonString, time.Minute*1)
 
 	// Assertions
-	if assert.NoError(t, ListHandler(rd)(c)) {
+	if assert.NoError(t, List(rd)(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.JSONEq(t, listJsonString, rec.Body.String())
 	}

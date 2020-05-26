@@ -19,7 +19,7 @@ import (
 // @Failure 404 {object} echo.HTTPError
 // @Failure 500 {object} echo.HTTPError
 // @Router /l/{uuid} [get]
-func ListHandler(rd *redis.Client) func(c echo.Context) error {
+func List(rd *redis.Client) func(c echo.Context) error {
 	return func(c echo.Context) error {
 		u, err := uuid.Parse(c.Param("uuid"))
 		if err != nil {

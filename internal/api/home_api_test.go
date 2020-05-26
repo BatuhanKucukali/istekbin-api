@@ -16,7 +16,7 @@ func TestHomeHandler(t *testing.T) {
 	c := e.NewContext(req, rec)
 
 	// Assertions
-	if assert.NoError(t, HomeHandler(c)) {
+	if assert.NoError(t, Home(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.Equal(t, "Welcome :)", rec.Body.String())
 	}

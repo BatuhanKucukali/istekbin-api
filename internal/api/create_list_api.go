@@ -15,7 +15,7 @@ import (
 // @Failure 404 {object} echo.HTTPError
 // @Failure 500 {object} echo.HTTPError
 // @Router /cl [get]
-func CreateListHandler(rd *redis.Client) func(c echo.Context) error {
+func CreateList(rd *redis.Client) func(c echo.Context) error {
 	return func(c echo.Context) error {
 		key := c.RealIP() // TODO list key should be ip+fingerprint
 

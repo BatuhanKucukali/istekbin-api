@@ -29,7 +29,7 @@ func TestCreateListHandler(t *testing.T) {
 	rd.Set(c.RealIP(), itemBytes, time.Minute*1)
 
 	// Assertions
-	if assert.NoError(t, CreateListHandler(rd)(c)) {
+	if assert.NoError(t, CreateList(rd)(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.JSONEq(t, string(itemBytes), rec.Body.String())
 	}
@@ -48,7 +48,7 @@ func TestCreateListHandlerShouldReturnEmptyResponse(t *testing.T) {
 	itemBytes, _ := json.Marshal([]BinItem{})
 
 	// Assertions
-	if assert.NoError(t, CreateListHandler(rd)(c)) {
+	if assert.NoError(t, CreateList(rd)(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.JSONEq(t, string(itemBytes), rec.Body.String())
 	}
