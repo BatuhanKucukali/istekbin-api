@@ -18,7 +18,7 @@ RUN go build -o main .
 
 WORKDIR /dist
 
-COPY config.yml .
+COPY configs/config.yml .
 
 RUN cp /build/main .
 

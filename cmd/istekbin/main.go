@@ -77,9 +77,7 @@ func main() {
 }
 
 func initViper() {
-	viper.SetConfigName("config")
-	viper.AddConfigPath(".")
-	viper.SetConfigFile("config.yml")
+	viper.SetConfigFile("configs/config.yml")
 	viper.SetConfigType("yml")
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	viper.AutomaticEnv()
