@@ -27,6 +27,11 @@ go build ./cmd/istekbin-api
 ./istekbin-api
 ```
 
+### Run Test ###
+```bash
+go test ./internal/api/
+```
+
 ## Swagger
 Regenerate swagger.
 
