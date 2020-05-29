@@ -47,23 +47,7 @@ var doc = `{
                 }
             }
         },
-        "/c": {
-            "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "summary": "Create bin",
-                "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/echo.HTTPError"
-                        }
-                    }
-                }
-            }
-        },
-        "/cl": {
+        "/bins": {
             "get": {
                 "produces": [
                     "application/json"
@@ -85,6 +69,20 @@ var doc = `{
                             "$ref": "#/definitions/echo.HTTPError"
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "Create bin",
+                "responses": {
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {

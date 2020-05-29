@@ -60,17 +60,7 @@ paths:
           schema:
             type: string
       summary: Welcome page
-  /c:
-    post:
-      consumes:
-      - application/json
-      responses:
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/echo.HTTPError'
-      summary: Create bin
-  /cl:
+  /bins:
     get:
       produces:
       - application/json
@@ -90,6 +80,15 @@ paths:
           schema:
             $ref: '#/definitions/echo.HTTPError'
       summary: List of created bin
+    post:
+      consumes:
+      - application/json
+      responses:
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      summary: Create bin
   /l/{uuid}:
     get:
       consumes:

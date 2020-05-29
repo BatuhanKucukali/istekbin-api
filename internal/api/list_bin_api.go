@@ -14,7 +14,7 @@ import (
 // @Success 200 {object} []Bin
 // @Failure 404 {object} echo.HTTPError
 // @Failure 500 {object} echo.HTTPError
-// @Router /cl [get]
+// @Router /bins [get]
 func ListBin(rd *redis.Client) func(c echo.Context) error {
 	return func(c echo.Context) error {
 		key := c.RealIP() // TODO list key should be ip+fingerprint

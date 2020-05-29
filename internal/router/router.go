@@ -20,10 +20,10 @@ func Init(conf *config.Configuration, rd *redis.Client) *echo.Echo {
 	e.Use(cors(&conf.AppConfig))
 
 	e.GET("/", api.Home)
-	e.POST("/c", api.CreateBin(&conf.AppConfig, rd))
-	e.GET("/cl", api.ListBin(rd))
-	e.GET("/l/:uuid", api.ListRequest(rd))
+	e.POST("/bins", api.CreateBin(&conf.AppConfig, rd))
+	e.GET("/bins", api.ListBin(rd))
 
+	e.GET("/l/:uuid", api.ListRequest(rd))
 	rg := e.Group("/r/:uuid")
 	rg.Any("", api.CreateRequest(&conf.AppConfig, rd))
 	rg.Any("/", api.CreateRequest(&conf.AppConfig, rd))
