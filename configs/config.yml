@@ -9,7 +9,7 @@ app:
     - X-Forwarded-Proto
     - X-Request-Start
   historyCount: 5
-  maxRequestSize: 50
+  maxRequestCount: 50
 
 rate:
   limit: 100

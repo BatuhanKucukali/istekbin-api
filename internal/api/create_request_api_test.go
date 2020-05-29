@@ -66,7 +66,7 @@ func TestCreateRequestShouldReturnNotFoundWhenKeyIsNotFound(t *testing.T) {
 	}
 }
 
-func TestCreateRequestShouldReturnBadRequestWhenRequestSizeExceedMaxRequestSize(t *testing.T) {
+func TestCreateRequestShouldReturnBadRequestWhenRequestCountExceedMaxRequestCount(t *testing.T) {
 	// Setup
 	key := uuid.New().String()
 
@@ -80,7 +80,7 @@ func TestCreateRequestShouldReturnBadRequestWhenRequestSizeExceedMaxRequestSize(
 	rd := redisClient()
 	defer teardown()
 
-	conf := &config.App{MaxRequestSize: 2}
+	conf := &config.App{MaxRequestCount: 2}
 	request := Request{Body: "request-1"}
 	request2 := Request{Body: "request-2"}
 
@@ -122,7 +122,7 @@ func TestCreateRequestShouldCreateRequest(t *testing.T) {
 	rd := redisClient()
 	defer teardown()
 
-	conf := &config.App{MaxRequestSize: 50}
+	conf := &config.App{MaxRequestCount: 50}
 
 	rd.Set(key, nil, time.Minute*1)
 
@@ -176,7 +176,7 @@ func TestCreateRequestShouldCreateRequest_WhenBodyIsMultipartFormData(t *testing
 	rd := redisClient()
 	defer teardown()
 
-	conf := &config.App{MaxRequestSize: 50}
+	conf := &config.App{MaxRequestCount: 50}
 
 	rd.Set(key, nil, time.Minute*1)
 
@@ -217,7 +217,7 @@ func TestCreateRequestShouldRemoveForbiddenHeaderFromHeaders(t *testing.T) {
 
 	conf := &config.App{
 		ForbiddenHeaders: []string{"X-Forwarded-For", "X-Forwarded-Port", "X-Forwarded-Proto", "X-Request-Start"},
-		MaxRequestSize:   50,
+		MaxRequestCount:  50,
 	}
 
 	rd.Set(key, nil, time.Minute*1)

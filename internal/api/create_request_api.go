@@ -61,8 +61,8 @@ func CreateRequest(conf *config.App, rd *redis.Client) func(c echo.Context) erro
 			}
 		}
 
-		if len(rl) >= conf.MaxRequestSize {
-			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("max request size is %d", conf.MaxRequestSize))
+		if len(rl) >= conf.MaxRequestCount {
+			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("max request count is %d", conf.MaxRequestCount))
 		}
 
 		req := c.Request()
