@@ -1,0 +1,21 @@
+language: go
+
+go:
+  - 1.14
+
+env:
+  - GO111MODULE=on
+
+cache:
+  directories:
+    - $HOME/.cache/go-build
+    - $GOPATH/pkg/mod
+
+script:
+  - go mod download
+  - go test ./...
+
+notifications:
+  email:
+    on_success: change
+    on_failure: always
