@@ -5,6 +5,7 @@ Istekbin is a free service that allows you to collect http request.
 [![GitHub license](https://img.shields.io/github/license/BatuhanKucukali/istekbin-api)](https://github.com/BatuhanKucukali/istekbin-api/blob/master/LICENSE)
 [![GitHub issues](https://img.shields.io/github/issues/BatuhanKucukali/istekbin-api)](https://github.com/BatuhanKucukali/istekbin-api/issues)
 [![Build Status](https://travis-ci.org/BatuhanKucukali/istekbin-api.svg?branch=master)](https://travis-ci.org/BatuhanKucukali/istekbin-api)
+[![Coverage Status](https://coveralls.io/repos/github/BatuhanKucukali/istekbin-api/badge.svg?branch=master)](https://coveralls.io/github/BatuhanKucukali/istekbin-api?branch=master)
 
 ## Clients
 [Istekbin Web](https://github.com/BatuhanKucukali/istekbin-frontend)    
