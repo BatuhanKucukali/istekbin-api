@@ -1,6 +1,6 @@
 app:
   port: 1323
-  bodyLimit: 512K
+  bodyLimit: 256K
   requestStoreTime: 24h
   forbiddenHeaders:
     - X-Forwarded-For

@@ -80,20 +80,11 @@ func CreateRequest(conf *config.App, rd *redis.Client) func(c echo.Context) erro
 		r.Headers = getHeaders(req.Header, *conf)
 		r.Cookies = getCookies(req)
 
-		if isMultipartForm(contentType) {
-			body, err := parseMultipartBody(c)
-			if err != nil {
-				return echo.NewHTTPError(http.StatusInternalServerError, "body can not reading.")
-			}
-			r.Body = body
-			r.ContentType = echo.MIMEMultipartForm
-		} else {
-			body, err := parseBody(req.Body)
-			if err != nil {
-				return echo.NewHTTPError(http.StatusInternalServerError, "body can not reading.")
-			}
-			r.Body = body
+		body, err := getBody(req.Body)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, "body can not reading.")
 		}
+		r.Body = body
 
 		requests := append([]Request{*r}, rl...)
 
@@ -149,30 +140,10 @@ func getHeaders(header http.Header, conf config.App) map[string]string {
 	return headerMap
 }
 
-func parseBody(reqBody io.ReadCloser) (string, error) {
+func getBody(reqBody io.ReadCloser) (string, error) {
 	body, err := ioutil.ReadAll(reqBody)
 	if err != nil {
 		return "", err
 	}
 	return string(body), nil
-}
-
-func parseMultipartBody(c echo.Context) (string, error) {
-	multi, err := c.MultipartForm()
-
-	if err != nil {
-		return "", err
-	}
-
-	var body string
-
-	for form := range multi.Value {
-		body += fmt.Sprintf("%s=%s\n", form, c.FormValue(form))
-	}
-
-	return body, nil
-}
-
-func isMultipartForm(contentType string) bool {
-	return strings.Contains(contentType, echo.MIMEMultipartForm)
 }

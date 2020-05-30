@@ -1,14 +1,12 @@
 package api
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"github.com/batuhankucukali/istekbin-api/internal/config"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
-	"mime/multipart"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -144,55 +142,6 @@ func TestCreateRequestShouldCreateRequest(t *testing.T) {
 		assert.Equal(t, echo.MIMEApplicationJSON, result.ContentType)
 		assert.Equal(t, convertHeaderToMap(req.Header), result.Headers)
 		assert.Equal(t, convertCookieToMap(req), result.Cookies)
-	}
-}
-
-func TestCreateRequestShouldCreateRequest_WhenBodyIsMultipartFormData(t *testing.T) {
-	// Setup
-	key := uuid.New().String()
-
-	buf := new(bytes.Buffer)
-	mw := multipart.NewWriter(buf)
-	mw.WriteField("name", "John Doe")
-	mw.Close()
-
-	e := echo.New()
-	req := httptest.NewRequest(http.MethodPost, "/r/"+key+"/", buf)
-	req.Header.Set(echo.HeaderContentType, mw.FormDataContentType())
-	req.Header.Set("User-Agent", "Go-Agent")
-	req.RemoteAddr = "192.168.1.1"
-	req.Host = "example.com"
-
-	cookie := new(http.Cookie)
-	cookie.Name = "username"
-	cookie.Value = "jon"
-	req.AddCookie(cookie)
-
-	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
-	c.SetParamNames("uuid")
-	c.SetParamValues(key)
-
-	rd := redisClient()
-	defer teardown()
-
-	conf := &config.App{MaxRequestCount: 50}
-
-	rd.Set(key, nil, time.Minute*1)
-
-	// Assertions
-	if assert.NoError(t, CreateRequest(conf, rd)(c)) {
-		assert.Equal(t, http.StatusOK, rec.Code)
-		assert.Equal(t, "ok", rec.Body.String())
-
-		val, err := rd.Get(key).Result()
-		if err != nil {
-			assert.Fail(t, "request not found")
-		}
-
-		result := getRequest(val)
-		assert.Equal(t, echo.MIMEMultipartForm, result.ContentType)
-		assert.Equal(t, "name=John Doe\n", result.Body)
 	}
 }
 
