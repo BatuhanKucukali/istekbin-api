@@ -17,7 +17,6 @@ type App struct {
 	Port             int16         `mapstructure:"port"`
 	BodyLimit        string        `mapstructure:"bodyLimit"`
 	RequestStoreTime time.Duration `mapstructure:"requestStoreTime"`
-	ClientUrl        string        `mapstructure:"clientUrl"`
 	ForbiddenHeaders []string      `mapstructure:"forbiddenHeaders"`
 	HistoryCount     int           `mapstructure:"historyCount"`
 	MaxRequestCount  int           `mapstructure:"maxRequestCount"`
