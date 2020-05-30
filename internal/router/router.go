@@ -17,7 +17,7 @@ func Init(conf *config.Configuration, rd *redis.Client) *echo.Echo {
 	e.Use(middleware.Recover())
 	e.Use(middleware.BodyLimit(conf.AppConfig.BodyLimit))
 	e.Use(rateLimit(&conf.Rate, rd))
-	e.Use(cors(&conf.AppConfig))
+	e.Use(cors())
 
 	e.GET("/", api.Home)
 	e.POST("/bins", api.CreateBin(&conf.AppConfig, rd))

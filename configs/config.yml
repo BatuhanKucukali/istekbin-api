@@ -2,7 +2,6 @@ app:
   port: 1323
   bodyLimit: 512K
   requestStoreTime: 24h
-  clientUrl: http://localhost:8080
   forbiddenHeaders:
     - X-Forwarded-For
     - X-Forwarded-Port
