@@ -66,6 +66,39 @@ func TestCreateRequestShouldReturnNotFoundWhenKeyIsNotFound(t *testing.T) {
 	}
 }
 
+func TestCreateRequestShouldReturnBadRequestWhenRequestCountExceedMaxRequestCount(t *testing.T) {
+	// Setup
+	key := uuid.New().String()
+
+	e := echo.New()
+	req := httptest.NewRequest(http.MethodPost, "/r/", nil)
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+	c.SetParamNames("uuid")
+	c.SetParamValues(key)
+
+	rd := redisClient()
+	defer teardown()
+
+	conf := &config.App{MaxRequestCount: 2}
+	request := Request{Body: "request-1"}
+	request2 := Request{Body: "request-2"}
+
+	var rl []Request
+	requests := append(rl, request, request2)
+	requestBytes, _ := json.Marshal(requests)
+	rd.Set(key, requestBytes, time.Minute*1)
+
+	// Assertions
+	err := CreateRequest(conf, rd)(c)
+	if assert.NotNil(t, err) {
+		rec, ok := err.(*echo.HTTPError)
+		if ok {
+			assert.Equal(t, http.StatusBadRequest, rec.Code)
+		}
+	}
+}
+
 func TestCreateRequestShouldCreateRequest(t *testing.T) {
 	// Setup
 	key := uuid.New().String()
@@ -89,7 +122,7 @@ func TestCreateRequestShouldCreateRequest(t *testing.T) {
 	rd := redisClient()
 	defer teardown()
 
-	conf := &config.App{}
+	conf := &config.App{MaxRequestCount: 50}
 
 	rd.Set(key, nil, time.Minute*1)
 
@@ -143,7 +176,7 @@ func TestCreateRequestShouldCreateRequest_WhenBodyIsMultipartFormData(t *testing
 	rd := redisClient()
 	defer teardown()
 
-	conf := &config.App{}
+	conf := &config.App{MaxRequestCount: 50}
 
 	rd.Set(key, nil, time.Minute*1)
 
@@ -184,6 +217,7 @@ func TestCreateRequestShouldRemoveForbiddenHeaderFromHeaders(t *testing.T) {
 
 	conf := &config.App{
 		ForbiddenHeaders: []string{"X-Forwarded-For", "X-Forwarded-Port", "X-Forwarded-Proto", "X-Request-Start"},
+		MaxRequestCount:  50,
 	}
 
 	rd.Set(key, nil, time.Minute*1)

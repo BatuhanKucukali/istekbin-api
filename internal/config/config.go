@@ -20,6 +20,7 @@ type App struct {
 	ClientUrl        string        `mapstructure:"clientUrl"`
 	ForbiddenHeaders []string      `mapstructure:"forbiddenHeaders"`
 	HistoryCount     int           `mapstructure:"historyCount"`
+	MaxRequestCount  int           `mapstructure:"maxRequestCount"`
 }
 
 type Redis struct {

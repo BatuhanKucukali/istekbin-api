@@ -7,6 +7,7 @@ import (
 	"github.com/go-redis/redis/v7"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/gommon/log"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -52,6 +53,18 @@ func CreateRequest(conf *config.App, rd *redis.Client) func(c echo.Context) erro
 			return echo.ErrNotFound
 		}
 
+		var rl []Request
+		if len(result) > 0 {
+			if err := json.Unmarshal([]byte(result), &rl); err != nil {
+				log.Errorf("deserialize error. %s", err)
+				return echo.NewHTTPError(http.StatusInternalServerError, "deserialize error")
+			}
+		}
+
+		if len(rl) >= conf.MaxRequestCount {
+			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("max request count is %d", conf.MaxRequestCount))
+		}
+
 		req := c.Request()
 
 		contentType := req.Header.Get(echo.HeaderContentType)
@@ -80,13 +93,6 @@ func CreateRequest(conf *config.App, rd *redis.Client) func(c echo.Context) erro
 				return echo.NewHTTPError(http.StatusInternalServerError, "body can not reading.")
 			}
 			r.Body = body
-		}
-		var rl []Request
-
-		if len(result) > 0 {
-			if err := json.Unmarshal([]byte(result), &rl); err != nil {
-				return echo.NewHTTPError(http.StatusInternalServerError, "request can not deserialized.")
-			}
 		}
 
 		requests := append([]Request{*r}, rl...)
