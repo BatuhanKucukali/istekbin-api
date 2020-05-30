@@ -12,12 +12,13 @@ cache:
     - $GOPATH/pkg/mod
 
 before_install:
-  - go get -u github.com/mattn/goveralls
+  - go get golang.org/x/tools/cmd/cover
+  - go get github.com/mattn/goveralls
 
 script:
   - go mod download
-  - go test ./... -covermode=count -coverprofile=profile.cov
-  - goveralls -coverprofile=profile.cov -service=travis-ci
+  - go test ./... -v -covermode=count -coverprofile=coverage.out
+  - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
 
 notifications:
   email:
